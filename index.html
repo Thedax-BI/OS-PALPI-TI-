@@ -1,464 +1,118 @@
-<!doctype html>
-<html lang="pt-BR">
+
+<!DOCTYPE html>
+<html lang="pt-br">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>OS PALPI-TI</title>
-<meta name="color-scheme" content="dark light">
-<style>
-:root{--bg:#0b1020;--card:#0f172a;--muted:#94a3b8;--text:#e5e7eb;--line:#1f2937;--accent:#60a5fa;--ok:#22c55e;--warn:#f59e0b;--bad:#ef4444}
-*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--text);font:500 15px/1.45 system-ui,Segoe UI,Roboto,Inter,Arial}
-.wrap{max-width:1360px;margin:22px auto;padding:0 12px}
-.h1{font-size:22px;font-weight:900;letter-spacing:.3px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-.muted{color:var(--muted)}
-.row{display:grid;gap:12px}
-.card{background:linear-gradient(180deg, rgba(96,165,250,.12), transparent 35%), var(--card);border:1px solid var(--line);border-radius:14px;padding:10px;box-shadow:0 8px 30px rgba(0,0,0,.2);min-width:0}
-.filters{display:grid;gap:8px;grid-template-columns:1fr 1fr; margin-bottom:8px}
-@media(min-width:680px){.filters{grid-template-columns:1fr 1fr 1fr 1fr auto auto}}
-select,input{background:#0a1224;border:1px solid #1e293b;border-radius:10px;padding:8px;color:var(--text);width:100%;font-size:14px}
-.tblWrap{overflow:auto; max-height:68vh}
-.tbl{width:100%;border-collapse:separate;border-spacing:0;min-width:0;table-layout:fixed}
-.tbl th,.tbl td{padding:5px 8px;border-bottom:1px solid var(--line);vertical-align:middle;white-space:normal;line-height:1.2;overflow:hidden;text-overflow:ellipsis}
-.tbl th{font-size:12px;letter-spacing:.3px;text-transform:uppercase;color:var(--muted);position:sticky;top:0;background:var(--card)}
-#tblDetalhe > thead{display:none}
-.kpi{display:grid;gap:8px;grid-template-columns:repeat(3,1fr); margin-bottom:6px}
-@media(min-width:680px){.kpi{grid-template-columns:repeat(6,1fr)}}
-.k{background:#0a1224;border:1px solid var(--line);border-radius:12px;padding:8px}
-.k b{display:block;font-size:18px;margin-top:2px}
-.crestBox{display:flex;gap:6px;align-items:center;min-width:220px;flex-wrap:nowrap;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.crest{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-weight:900;border:2px solid #223;box-shadow:0 6px 14px rgba(0,0,0,.25);overflow:hidden;flex:0 0 auto}
-.crest img{width:100%;height:100%;object-fit:cover;display:block}
-.crest.fallback.t1{background:radial-gradient(circle at 30% 30%, #7dd3fc, #1e3a8a)}
-.crest.fallback.t2{background:radial-gradient(circle at 30% 30%, #fca5a5, #7c2d12)}
-.badge{font-weight:800;padding:4px 8px;border-radius:999px;border:1px solid #334155;white-space:nowrap}
-.subtbl .badge{font-size:11px;padding:3px 6px}
-.badge.ok{background:rgba(34,197,94,.14);border-color:rgba(34,197,94,.35);color:#86efac}
-.badge.warn{background:rgba(245,158,11,.14);border-color:rgba(245,158,11,.35);color:#fde68a}
-.badge.bad{background:rgba(239,68,68,.14);border-color:rgba(239,68,68,.35);color:#fecaca}
-.badge.pend{background:rgba(148,163,184,.14);border-color:rgba(148,163,184,.35);color:#cbd5e1}
-.btn{cursor:pointer;background:var(--accent);color:#061225;border:none;border-radius:10px;padding:8px 10px;font-weight:800;width:100%}
-.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--text)}
-.btnRow{display:grid;gap:8px;grid-template-columns:1fr}
-.small{font-size:12px}
-/* Jogos + Ranking lado a lado (sidebar fixa, travado) */
-.rowCards{display:grid;gap:12px;grid-template-columns:minmax(0,1fr) 380px !important}
-.rowCards>.card{align-self:start;min-width:0}
-@media(max-width:900px){.rowCards{grid-template-columns:1fr !important}}
-/* Linha principal: Detalhes (fluido) + Ranking (fixo) */
-.rowMain{display:grid;gap:12px;grid-template-columns:minmax(0,1fr) 380px}
-.rowMain>.card{align-self:start;min-width:0}
-@media(max-width:900px){.rowMain{grid-template-columns:1fr !important}}
-/* Cards de jogos */
-.gridcards{display:grid;gap:8px;grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));margin-top:8px}
-@media(min-width:680px){.gridcards{grid-template-columns:repeat(3,1fr)}}
-@media(max-width:520px){.gridcards{grid-template-columns:1fr}}
-.cardMatch{background:#0a1224;border:1px solid var(--line);border-radius:14px;padding:10px}
-.matchHead{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:6px;flex-wrap:wrap}
-.teams{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.score{font-weight:900;font-size:16px}
-/* Blocos de jogo no detalhe */
-.gameBlock{border:1px dashed #223; border-radius:12px; padding:6px; margin:8px 0; background:rgba(2,8,23,.35)}
-.gameHead{font-size:12px;color:var(--muted);margin-bottom:4px}
-.gameTitle{display:flex;align-items:center;gap:8px;font-weight:800;margin-bottom:8px;cursor:pointer;user-select:none}
-.gameBlock.collapsed .gameBody{display:none}
-.caret{display:inline-block;transform:rotate(-90deg);transition:transform .15s ease;margin-right:4px}
-.gameBlock:not(.collapsed) .caret{transform:rotate(0)}
-.subtbl{width:100%;border-collapse:separate;border-spacing:0;table-layout:fixed}
-.subtbl thead{display:table-header-group}
-.subtbl th,.subtbl td{padding:4px 8px;border-bottom:1px solid #1e293b;vertical-align:middle;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.subtbl th{font-size:11px;color:#cbd5e1;text-transform:uppercase;letter-spacing:.3px;background:#0b1224;position:sticky;top:0;z-index:1;text-align:left}
-.subtbl col.c-palp{width:48%}
-.subtbl col.c-palpite{width:18%}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🏆 OS PALPI-TI</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #111827;
+      color: #fff;
+      padding: 1rem;
+    }
+    h1 {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .card {
+      background-color: #1f2937;
+      padding: 1rem;
+      border-radius: 5px;
+      flex: 1;
+      min-width: 300px;
+    }
+    .card h2 {
+      margin-top: 0;
+      font-size: 1rem;
+    }
+    .error {
+      color: red;
+      font-weight: bold;
+    }
+  </style>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript">
+    function fetchSheetData(query, callback, errorCallback) {
+      const url = 'https://docs.google.com/spreadsheets/d/1cFZsmH_vKis2LuVW63W-NMwMA2fXXMG1gRjzOZCpvWc/gviz/tq?tq=' + encodeURIComponent(query);
+      const script = document.createElement('script');
+      const callbackName = 'callback_' + Math.floor(Math.random() * 100000);
 
-.subtbl col.c-pontos{width:34%}
-@media(max-width:820px){.subtbl col.c-palp{width:48%}.subtbl col.c-palpite{width:18%}.subtbl col.c-pontos{width:34%}}.subtbl col.c-palpite{width:18%}.subtbl col.c-pontos{width:34%}}
+      window[callbackName] = function(response) {
+        try {
+          const table = new google.visualization.DataTable(response.table);
+          callback(table);
+        } catch (err) {
+          errorCallback(err);
+        }
+        delete window[callbackName];
+        script.remove();
+      };
 
-.sticker{font-size:18px;margin-right:6px}
-.toast{position:fixed;right:12px;bottom:12px;background:#111827;border:1px solid #30363d;color:#e5e7eb;padding:10px 12px;border-radius:10px;box-shadow:0 10px 24px rgba(0,0,0,.35);display:none;max-width:70vw}
-.err{background:#1b2437;border:1px solid #3b4861;color:#e2e8f0;padding:10px;border-radius:10px;margin:8px 0}
-</style>
+      script.src = url + '&tqx=responseHandler:' + callbackName;
+      script.onerror = function() {
+        errorCallback(new Error('Erro de conexão'));
+        delete window[callbackName];
+        script.remove();
+      };
+      document.body.appendChild(script);
+    }
+
+    function renderData() {
+      const areas = {
+        jogos: document.getElementById("jogos"),
+        ranking: document.getElementById("ranking"),
+        pendentes: document.getElementById("pendentes")
+      };
+
+      Object.values(areas).forEach(div => div.textContent = 'Carregando...');
+
+      fetchSheetData('SELECT A, B, C LIMIT 5', table => {
+        areas.jogos.textContent = '✅ Dados carregados com sucesso: ' + table.getNumberOfRows() + ' linhas';
+      }, () => {
+        areas.jogos.innerHTML = '<span class="error">Erro ao carregar os dados.</span>';
+      });
+
+      fetchSheetData('SELECT D, E LIMIT 5', table => {
+        areas.ranking.textContent = '✅ Ranking carregado: ' + table.getNumberOfRows() + ' entradas';
+      }, () => {
+        areas.ranking.innerHTML = '<span class="error">Erro ao carregar os dados.</span>';
+      });
+
+      fetchSheetData('SELECT F LIMIT 5', table => {
+        areas.pendentes.textContent = '✅ Pendentes carregados: ' + table.getNumberOfRows() + ' registros';
+      }, () => {
+        areas.pendentes.innerHTML = '<span class="error">Erro ao carregar os dados.</span>';
+      });
+    }
+
+    google.charts.load('current', { packages: ['corechart'] });
+    google.charts.setOnLoadCallback(renderData);
+  </script>
 </head>
 <body>
-<div class="wrap">
-  <div class="h1">🏆 OS PALPI-TI — Palpites x Resultados <span class="muted" id="status">carregando…</span> <span class="muted small">(v19)</span></div>
-
-  <!-- Linha 1: Filtros + Detalhes (rolagem) -->
-  <div class="rowMain">
-  <div class="card">
-      <div class="filters">
-        <select id="fPalpiteiro"><option value="">Palpiteiros</option></select>
-        <select id="fLiga"><option value="">Campeonatos</option></select>
-        <select id="fData"><option value="">Datas</option></select>
-        <input id="fBusca" placeholder="Buscar por time/jogo…" />
-        <button class="btn ghost" id="btnReset">Limpar</button>
-        <button class="btn ghost" id="btnReload">Recarregar</button>
-      </div>
-      <div id="err" class="err" style="display:none"></div>
-      <div class="kpi" id="kpi"></div>
-<div class="btnRow" style="grid-template-columns:auto auto;justify-content:flex-end;margin:2px 0 6px 0;gap:6px">
-  <button class="btn ghost" id="btnExpandir">Expandir tudo</button>
-  <button class="btn ghost" id="btnRecolher">Recolher tudo</button>
-</div>
-      <div class="tblWrap">
-        <table class="tbl" id="tblDetalhe">
-          <thead><tr>
-            <th>Data</th><th>Campeonato</th><th>Jogo</th><th>Palpiteiro</th><th>Palpite</th><th>Status/Pontos</th>
-          </tr></thead>
-          <tbody></tbody>
-        </table>
-      </div>
-      <div class="small muted" style="margin-top:8px">
-        Pontuação: vencedor=3 • vencedor+placar=6 • vencedor+mesma margem=1 • pendente=1 (provisório) • erro=0
-      </div>
-      <div class="small muted" style="margin-top:6px">
-        Fonte publicada: <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vTn-RzJIruNHBrurvld5L3zclXN9lWWAPVa90un0PeoJSV7V-1XIq1pRoL_-Mq7PZLS4jWvO4VvF7FC/pubhtml?gid=1746213473&single=true" target="_blank" rel="noopener">pubhtml</a> (leitura via GViz/JSONP sem CORS).
-      </div>
+  <h1>🏆 OS PALPI-TI</h1>
+  <div class="container">
+    <div class="card"><strong>Filtros (Palpiteiros, Campeonatos, Datas, etc.)</strong></div>
+    <div class="card"><strong>Cartões (KPIs: Palpites, Exatos, Vencedores, etc.)</strong></div>
+    <div class="row">
+      <div class="card" id="jogos">Carregando Jogos...</div>
+      <div class="card" id="ranking">Carregando Ranking...</div>
+      <div class="card" id="pendentes">Carregando Resultados Pendentes...</div>
     </div>
-    <div class="card" id="cardRanking">
-      <div class="small muted" style="margin:0 0 6px 0">Ranking</div>
-      <div class="tblWrap" style="max-height:68vh">
-        <table class="tbl" id="tblRank">
-          <thead><tr>
-            <th>Palpiteiro</th><th>Pts</th><th>Exatos</th><th>Vencedor</th><th>Margem</th><th>Provis.</th><th>Erros</th><th>Aprov.</th>
-          </tr></thead>
-          <tbody></tbody>
-        </table>
-      </div>
-</div>
-
-<div class="row">
-  <div class="card">
-      <div class="muted small" style="margin-bottom:6px">Jogos</div>
-      <div class="gridcards" id="cards"></div>
-    </div>
-</div>
   </div>
-
-</div>
-
-<div class="toast" id="toast">Link copiado!</div>
-
-<script>
-// ======= CONFIG (GViz) =======
-const CONFIG = {
-  SHEET_ID: "1BN8qI5_QnTPbpBxd4yT-Ng6qmDChLFhXohHFnY4R5vE",
-  SHEET_NAME: "Respostas ao formulário 1",
-  CRESTS: {"São Paulo": "https://commons.wikimedia.org/wiki/Special:FilePath/Brasao%20do%20Sao%20Paulo%20Futebol%20Clube.svg", "Sport Club Internacional": "https://commons.wikimedia.org/wiki/Special:FilePath/Escudo%20do%20Sport%20Club%20Internacional.svg", "Internacional": "https://commons.wikimedia.org/wiki/Special:FilePath/Escudo%20do%20Sport%20Club%20Internacional.svg", "Corinthians": "https://commons.wikimedia.org/wiki/Special:FilePath/SC%20Corinthians.svg", "Sport Club Corinthians Paulista": "https://commons.wikimedia.org/wiki/Special:FilePath/SC%20Corinthians.svg", "Fortaleza": "https://commons.wikimedia.org/wiki/Special:FilePath/FortalezaEsporteClube.svg", "Fortaleza EC": "https://commons.wikimedia.org/wiki/Special:FilePath/FortalezaEsporteClube.svg", "Santos": "https://commons.wikimedia.org/wiki/Special:FilePath/Santos%20logo.svg", "EC Juventude": "https://commons.wikimedia.org/wiki/Special:FilePath/EC%20Juventude.svg", "Juventude": "https://commons.wikimedia.org/wiki/Special:FilePath/EC%20Juventude.svg", "Athletico Paranaense": "https://commons.wikimedia.org/wiki/Special:FilePath/Athletico%20Paranaense%20%28Logo%202019%29.svg", "Athletico-PR": "https://commons.wikimedia.org/wiki/Special:FilePath/Athletico%20Paranaense%20%28Logo%202019%29.svg", "Palmeiras": "https://commons.wikimedia.org/wiki/Special:FilePath/Palmeiras%20logo.svg", "Sociedade Esportiva Palmeiras": "https://commons.wikimedia.org/wiki/Special:FilePath/Palmeiras%20logo.svg"}
-};
-// =============================
-
-// JSONP hook do GViz (sem CORS)
-window.google = { visualization: { Query: { setResponse: function(resp){ handleGViz(resp); }}}};
-
-const statusEl = document.getElementById('status');
-const errEl = document.getElementById('err');
-const $ = s => document.querySelector(s);
-
-// ---- Date helpers ----
-function toJSDate(v){
-  if (v instanceof Date) return v;
-  if (typeof v === 'string'){
-    const m = v.match(/^Date\((\d{4}),\s*(\d{1,2}),\s*(\d{1,2})(?:,\s*(\d{1,2}),\s*(\d{1,2}),\s*(\d{1,2}))?\)$/);
-    if (m){
-      const Y=+m[1], M=+m[2], D=+m[3], h=+(m[4]||0), mi=+(m[5]||0), s=+(m[6]||0);
-      return new Date(Y, M, D, h, mi, s); // GViz já fornece M 0-based
-    }
-    const d = new Date(v);
-    if (!isNaN(d)) return d;
-  }
-  return null;
-}
-function pad2(n){ return (n<10?'0':'')+n; }
-function formatDateBR(d){ return pad2(d.getDate()) + '/' + pad2(d.getMonth()+1) + '/' + d.getFullYear(); }
-function dateKey(d){ return d.getFullYear() + '-' + pad2(d.getMonth()+1) + '-' + pad2(d.getDate()); }
-
-function gvizUrl(){
-  const base = `https://docs.google.com/spreadsheets/d/${CONFIG.SHEET_ID}/gviz/tq`;
-  const params = new URLSearchParams({ tqx: 'out:json', sheet: CONFIG.SHEET_NAME });
-  return base + '?' + params.toString();
-}
-
-function loadGViz(){
-  return new Promise((resolve, reject) => {
-    const s = document.createElement('script');
-    s.src = gvizUrl();
-    s.async = true;
-    s.onerror = () => reject(new Error("Falha de rede ou permissão no Google Sheets (GViz)."));
-    window._gvizDone = (rows) => resolve(rows);
-    document.head.appendChild(s);
-  });
-}
-
-function parseGVizTable(json){
-  const cols = json.table?.cols?.map(c => c.label || c.id || '') || [];
-  const rows = (json.table?.rows || []).map(r => {
-    const obj = {};
-    (r.c || []).forEach((c, i) => { obj[cols[i] || ('col'+(i+1))] = (c?.v ?? c?.f ?? ''); });
-    return obj;
-  });
-  return rows;
-}
-
-function handleGViz(resp){
-  try{
-    const rows = parseGVizTable(resp);
-    window._gvizDone && window._gvizDone(rows);
-  }catch(e){
-    console.error(e);
-    showError("Não consegui interpretar a resposta do GViz. Confirme o nome da aba no CONFIG.SHEET_NAME.");
-  }
-}
-
-function showError(msg){
-  statusEl.textContent = 'erro';
-  errEl.style.display = 'block';
-  errEl.innerHTML = `<b>Não consegui ler a planilha.</b><br>${msg}<br><br><b>Checklist rápido:</b><br>
-  1) Em <i>Compartilhar</i>, marque <b>Qualquer pessoa com o link – Leitor</b>.<br>
-  2) Se necessário, use <i>Arquivo → Publicar na Web</i> (aba “${CONFIG.SHEET_NAME}”).`;
-}
-
-// Utils
-function crestHTML(teamName, cls){
-  const url = CONFIG.CRESTS[teamName] || null;
-  if (url) return `<div class="crest"><img src="${url}" alt="escudo ${teamName}" onerror="this.closest('.crest').classList.add('fallback','${cls}'); this.remove();"></div>`;
-  const initials = (teamName||'').split(/\s+/).map(w=>w[0]).filter(Boolean).slice(0,3).join('').toUpperCase();
-  return `<div class="crest fallback ${cls}">${initials}</div>`;
-}
-function sticker(name){ const E=["🤙","🔥","🚀","🧠","🦊","🐯","🦾","🎯","🪄","💎","🧩","⚡","🏆","🎲","🎮","🥇","🥷","🧭"]; let h=0; for(let i=0;i<(name||'').length;i++) h=(h*31+name.charCodeAt(i))>>>0; return E[h%E.length]; }
-function outcome(h,a){ if (h==null||a==null||isNaN(h)||isNaN(a)) return null; if (h>a) return 'H'; if (h<a) return 'A'; return 'D'; }
-function score(p1,p2,g1,g2){ if (g1==null||g2==null||isNaN(g1)||isNaN(g2)) return {status:"Pendente (1 pt provisório)", pts:1};
-  if (p1===g1 && p2===g2) return {status:"Placar exato", pts:6};
-  const ocp=outcome(p1,p2), ocr=outcome(g1,g2);
-  if (ocp===ocr) return Math.abs(p1-p2)===Math.abs(g1-g2) ? {status:"Vencedor + margem", pts:1} : {status:"Vencedor", pts:3};
-  return {status:"Errou", pts:0}; }
-
-function buildData(rows){
-  const cols = Object.keys(rows[0]||{});
-  const patTeamCol = /^Selecione o Time A \[(.+)\]$/i;
-  const teamCols = cols.filter(c => patTeamCol.test(c));
-  const cTS    = cols.find(c => /carimbo.+hora/i.test(c)) || cols[0];
-  const cLiga  = cols.find(c => /campeonato|liga|torneio|competi/i.test(c)) || "Campeonato";
-  const cData  = cols.find(c => /data.*jogo|data/i.test(c)) || "Data do Jogo";
-  const cPalp  = cols.find(c => /palpiteiro|participante|respondente/i.test(c)) || "Palpiteiro";
-  const cTipo  = cols.find(c => /lan[cç]amento|tipo/i.test(c));
-
-  const isResultado = r => {
-    const valPalp = String(r[cPalp]||'').trim().toLowerCase();
-    const valTipo = cTipo ? String(r[cTipo]||'').trim().toLowerCase() : '';
-    return valPalp === 'resultado' || valTipo === 'resultado';
-  };
-  const toNum = v => (v===''||v==null) ? NaN : Number(String(v).replace(',','.').trim());
-  const tsOf = r => { const d=toJSDate(r[cTS])||new Date(r[cTS]); return isNaN(d)?0:d.getTime(); };
-
-  // Resultados – último por jogo
-  const resPairs = [];
-  rows.filter(isResultado).forEach(r => {
-    const filled = teamCols.map(c => [c, toNum(r[c])]).filter(([,v]) => !isNaN(v));
-    if (filled.length!==2) return;
-    const [[c1,g1],[c2,g2]] = filled;
-    const t1 = c1.match(patTeamCol)[1], t2 = c2.match(patTeamCol)[1];
-    const dj = toJSDate(r[cData]); const DataKey = dj? dateKey(dj) : String(r[cData]); const DataDisp = dj? formatDateBR(dj) : String(r[cData]);
-    resPairs.push({ Campeonato:r[cLiga], Data:DataDisp, DataKey:DataKey, team1_col:c1, team1:t1, g1:g1, team2_col:c2, team2:t2, g2:g2, _ts: tsOf(r) });
-  });
-  const resMap = new Map(); resPairs.forEach(m => { const k = `${m.Campeonato}|${m.DataKey}|${m.team1_col}|${m.team2_col}`; const old=resMap.get(k); if(!old||m._ts>old._ts) resMap.set(k,m); });
-  const results = Array.from(resMap.values());
-
-  // Palpites – último por palpiteiro+jogo
-  const palpsRaw = [];
-  rows.filter(r => !isResultado(r)).forEach(r => {
-    const filled = teamCols.map(c => [c, toNum(r[c])]).filter(([,v]) => !isNaN(v));
-    if (filled.length!==2) return;
-    const [[c1,p1],[c2,p2]] = filled;
-    const t1 = c1.match(patTeamCol)[1], t2 = c2.match(patTeamCol)[1];
-    const dj2 = toJSDate(r[cData]); const DataKey2 = dj2? dateKey(dj2) : String(r[cData]); const DataDisp2 = dj2? formatDateBR(dj2) : String(r[cData]);
-    palpsRaw.push({ Palpiteiro:r[cPalp], Campeonato:r[cLiga], Data:DataDisp2, DataKey:DataKey2, team1_col:c1, team1:t1, p1:p1, team2_col:c2, team2:t2, p2:p2, _ts: tsOf(r) });
-  });
-  const palpMap = new Map(); palpsRaw.forEach(p => { const k = `${p.Palpiteiro}|${p.Campeonato}|${p.DataKey}|${p.team1_col}|${p.team2_col}`; const old=palpMap.get(k); if(!old||p._ts>old._ts) palpMap.set(k,p); });
-  const palps = Array.from(palpMap.values());
-
-  // Union de jogos
-  const mkey = m => `${m.Campeonato}|${m.DataKey}|${m.team1_col}|${m.team2_col}`;
-  const matchMap = new Map(); results.forEach(r => matchMap.set(mkey(r), r)); palps.forEach(p => { if(!matchMap.has(mkey(p))) matchMap.set(mkey(p), p); });
-  const matches = Array.from(matchMap.values());
-
-  // Detalhes com pontuação
-  const details = [];
-  matches.forEach(m => {
-    const g = results.find(x => mkey(x)===mkey(m));
-    const g1 = g? g.g1 : null, g2 = g? g.g2 : null;
-    palps.filter(p => mkey(p)===mkey(m)).forEach(p => {
-      const sc = score(p.p1, p.p2, g1, g2);
-      details.push({ Data:m.Data, Campeonato:m.Campeonato, Jogo:`${m.team1} x ${m.team2}`, team1:m.team1, team2:m.team2,
-        Palpiteiro:p.Palpiteiro, p1:p.p1, p2:p.p2, g1:(g1!=null?g1:null), g2:(g2!=null?g2:null), Status:sc.status, Pontos:sc.pts });
-    });
-  });
-
-  // Ranking
-  const byP = new Map();
-  details.forEach(r => {
-    const it = byP.get(r.Palpiteiro) || {Palpiteiro:r.Palpiteiro, Pts:0, Exatos:0, Vencedor:0, Margem:0, Provisorios:0, Erros:0, Total:0};
-    it.Pts += r.Pontos; it.Total++;
-    if (r.Status==="Placar exato") it.Exatos++;
-    else if (r.Status==="Vencedor") it.Vencedor++;
-    else if (r.Status==="Vencedor + margem") it.Margem++;
-    else if (r.Status.startsWith("Pendente")) it.Provisorios++;
-    else if (r.Status==="Errou") it.Erros++;
-    byP.set(r.Palpiteiro, it);
-  });
-  const rank = Array.from(byP.values()).map(x => Object.assign(x, {Aproveitamento_: Math.round(((x.Exatos+x.Vencedor+x.Margem)/Math.max(1,x.Total))*1000)/10}))
-                  .sort((a,b)=> b.Pts - a.Pts || b.Exatos - a.Exatos || b.Vencedor - a.Vencedor || b.Margem - a.Margem || b.Aproveitamento_ - a.Aproveitamento_);
-
-  return {details, rank};
-}
-
-function badge(status, pts){
-  let cls="pend"; if (status==="Placar exato") cls="ok"; else if (status==="Vencedor") cls="ok"; else if (status==="Vencedor + margem") cls="warn"; else if (status==="Errou") cls="bad";
-  return `<span class="badge ${cls}">${status} • ${pts} pts</span>`;
-}
-function renderKPI(rows){
-  const tot=rows.length, ex=rows.filter(r=>r.Status==="Placar exato").length, v=rows.filter(r=>r.Status==="Vencedor").length, m=rows.filter(r=>r.Status==="Vencedor + margem").length, pr=rows.filter(r=>r.Status.startsWith("Pendente")).length, er=rows.filter(r=>r.Status==="Errou").length;
-  document.getElementById('kpi').innerHTML = `
-    <div class="k"><span class="muted">Palpites</span><b>${tot}</b></div>
-    <div class="k"><span class="muted">Exatos</span><b>${ex}</b></div>
-    <div class="k"><span class="muted">Vencedor</span><b>${v}</b></div>
-    <div class="k"><span class="muted">Margem</span><b>${m}</b></div>
-    <div class="k"><span class="muted">Provisórios</span><b>${pr}</b></div>
-    <div class="k"><span class="muted">Erros</span><b>${er}</b></div>`;
-}
-function renderUI(data){
-  const details = data.details.slice();
-  const uniq = arr => Array.from(new Set(arr)).filter(Boolean).sort();
-  const palps = uniq(details.map(x=>x.Palpiteiro));
-  const ligas = uniq(details.map(x=>x.Campeonato));
-  const datas = uniq(details.map(x=>x.Data));
-  const pf = document.getElementById('fPalpiteiro'); palps.forEach(x => pf.insertAdjacentHTML('beforeend', `<option>${x}</option>`));
-  const lf = document.getElementById('fLiga'); ligas.forEach(x => lf.insertAdjacentHTML('beforeend', `<option>${x}</option>`));
-  const df = document.getElementById('fData'); datas.forEach(x => df.insertAdjacentHTML('beforeend', `<option>${x}</option>`));
-
-  const usp = new URLSearchParams(location.search);
-  if (usp.get('p')) pf.value = usp.get('p');
-  if (usp.get('l')) lf.value = usp.get('l');
-  if (usp.get('d')) df.value = usp.get('d');
-  if (usp.get('q')) document.getElementById('fBusca').value = usp.get('q');
-
-  function applyFilters(rows){
-    const p=pf.value, l=lf.value, d=df.value, q=(document.getElementById('fBusca').value||'').trim().toLowerCase();
-    return rows.filter(r => (!p||r.Palpiteiro===p) && (!l||r.Campeonato===l) && (!d||r.Data===d) && (!q || (`${r.team1} ${r.team2} ${r.Jogo}`.toLowerCase().includes(q))));
-  }
-  function crestHTML(teamName, cls){
-    const url = CONFIG.CRESTS[teamName] || null;
-    if (url) return `<div class="crest"><img src="${url}" alt="escudo ${teamName}" onerror="this.closest('.crest').classList.add('fallback','${cls}'); this.remove();"></div>`;
-    const initials = (teamName||'').split(/\s+/).map(w=>w[0]).filter(Boolean).slice(0,3).join('').toUpperCase();
-    return `<div class="crest fallback ${cls}">${initials}</div>`;
-  }
-  function sticker(name){ const E=["🤙","🔥","🚀","🧠","🦊","🐯","🦾","🎯","🪄","💎","🧩","⚡","🏆","🎲","🎮","🥇","🥷","🧭"]; let h=0; for(let i=0;i<(name||'').length;i++) h=(h*31+name.charCodeAt(i))>>>0; return E[h%E.length]; }
-
-  // Render agrupado por jogo
-  function renderDetail(){
-    const tbody = document.querySelector('#tblDetalhe tbody');
-    const rows = applyFilters(details);
-
-    // Agrupar por jogo
-    const groups = new Map();
-    rows.forEach(r => {
-      const key = r.Data + '|' + r.Campeonato + '|' + r.Jogo;
-      if(!groups.has(key)){
-        groups.set(key, {meta:{Data:r.Data, Campeonato:r.Campeonato, team1:r.team1, team2:r.team2, Jogo:r.Jogo}, items:[]});
-      }
-      groups.get(key).items.push(r);
-    });
-
-    // Construir blocos
-    let html = '';
-    groups.forEach(g => {
-      html += `<div class="gameBlock">
-        <div class="gameHead">${g.meta.Data} • ${g.meta.Campeonato}</div>
-        <div class="gameTitle">
-          <span class="caret">▸</span>
-          ${crestHTML(g.meta.team1,'t1')}
-          <div>${g.meta.team1} <span class="scoreInline">${(()=>{ const rr=g.items.find(it=>it.g1!=null&&it.g2!=null); return rr? rr.g1 : '—'; })()}</span></div>
-          <div class="muted" style="margin:0 6px">x</div>
-          ${crestHTML(g.meta.team2,'t2')}
-          <div>${g.meta.team2} <span class="scoreInline">${(()=>{ const rr=g.items.find(it=>it.g1!=null&&it.g2!=null); return rr? rr.g2 : '—'; })()}</span></div>
-          <div class="resTitle">${(()=>{ const rr=g.items.find(it=>it.g1!=null&&it.g2!=null); return rr? '' : '<span class="badge pend">Pendente</span>'; })()}</div>
-        </div>
-        <div class="gameBody">
-          <table class="subtbl"><colgroup><col class="c-palp"><col class="c-palpite"><col class="c-pontos"></colgroup>
-            <thead><tr><th>Palpiteiro</th><th>Palpite</th><th>Pontuação</th></tr></thead>
-            <tbody>
-              ${g.items.map(r => {
-                return `<tr>
-                  <td>${sticker(r.Palpiteiro)} ${r.Palpiteiro}</td>
-                  <td>${r.p1} x ${r.p2}</td>
-                  <td>${badge(r.Status, r.Pontos)}</td>
-                </tr>`;
-              }).join('')}
-            </tbody>
-          </table>
-        </div>
-      </div>`;
-    });
-
-    tbody.innerHTML = `<tr><td colspan="7">${html}</td></tr>`;
-document.querySelectorAll('.gameBlock .gameTitle').forEach(tt => {
-  tt.addEventListener('click', () => {
-    const blk = tt.closest('.gameBlock');
-    blk.classList.toggle('collapsed');
-  });
-});
-const bx = document.getElementById('btnExpandir'); if (bx) bx.onclick = ()=> document.querySelectorAll('.gameBlock').forEach(b=>b.classList.remove('collapsed'));
-const br = document.getElementById('btnRecolher'); if (br) br.onclick = ()=> document.querySelectorAll('.gameBlock').forEach(b=>b.classList.add('collapsed'));
-    renderKPI(rows);
-  }
-
-  function renderRank(){
-    const r = data.rank;
-    document.querySelector('#tblRank tbody').innerHTML = r.map(x => `
-      <tr>
-        <td>${sticker(x.Palpiteiro)} ${x.Palpiteiro}</td>
-        <td><b>${x.Pts}</b></td>
-        <td>${x.Exatos}</td>
-        <td>${x.Vencedor}</td>
-        <td>${x.Margem}</td>
-        <td>${x.Provisorios}</td>
-        <td>${x.Erros}</td>
-        <td>${x.Aproveitamento_}%</td>
-      </tr>`).join('');
-  }
-  function renderCards(){
-    const uniq = new Map(); details.forEach(r=>{ const key=r.Data+"|"+r.Campeonato+"|"+r.Jogo; if(!uniq.has(key)) uniq.set(key,r); });
-    const rows = Array.from(uniq.values());
-    document.getElementById('cards').innerHTML = rows.map(r => {
-      const res = (r.g1==null||r.g2==null) ? '<span class="badge pend">Pendente</span>' : `<span class="score">${r.g1} x ${r.g2}</span>`;
-      return `<div class="cardMatch">
-        <div class="matchHead"><div class="muted small">${r.Data} • ${r.Campeonato}</div><div>${res}</div></div>
-        <div class="teams">${crestHTML(r.team1,'t1')} <div>${r.team1}</div><div class="muted" style="margin:0 8px">x</div>${crestHTML(r.team2,'t2')} <div>${r.team2}</div></div>
-      </div>`;
-    }).join('');
-  }
-
-  document.getElementById('btnReset').addEventListener('click', ()=>{ pf.value=''; lf.value=''; df.value=''; document.getElementById('fBusca').value=''; renderDetail(); });
-  const _btnReload = document.getElementById('btnReload'); if (_btnReload) _btnReload.addEventListener('click', ()=> location.reload());
-  ['fPalpiteiro','fLiga','fData','fBusca'].forEach(id => document.getElementById(id).addEventListener('input', renderDetail));
-
-  renderRank(); renderDetail(); renderCards();
-}
-
-async function bootstrap(){
-  try{
-    statusEl.textContent = 'carregando…';
-    const rows = await loadGViz();
-    const data = buildData(rows);
-    renderUI(data);
-    statusEl.textContent = `ok • ${rows.length} respostas`;
-    errEl.style.display='none';
-  }catch(e){
-    showError(e.message || 'Falha ao carregar.');
-    console.error(e);
-  }
-}
-
-bootstrap();
-</script>
 </body>
 </html>

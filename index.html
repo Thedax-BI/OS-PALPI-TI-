@@ -245,7 +245,11 @@ function extractPairs(rows){
   const cPalp = cols.find(c => /palpiteiro|participante|respondente/i.test(c));
   if (!teamCols.length) throw new Error("Não encontrei colunas 'Selecione o Time A [...]' nesta aba.");
   const tsOf = r => new Date(r[cTS]).getTime() || 0;
-  const isResultado = r => String(r[cPalp]||'').trim().toLowerCase()==='resultado';
+  const isResultado = r => {
+    const valPalp = String(r[cPalp]||'').trim().toLowerCase();
+    const valTipo = cTipo ? String(r[cTipo]||'').trim().toLowerCase() : '';
+    return valPalp === 'resultado' || valTipo === 'resultado';
+  };
 
   // results
   const resPairs = [];
@@ -257,7 +261,7 @@ function extractPairs(rows){
     resPairs.push({Campeonato:r[cLiga], Data:r[cData], team1_col:c1, team1:t1, g1:Number(g1), team2_col:c2, team2:t2, g2:Number(g2), _ts:tsOf(r)});
   }
   const resMap = new Map();
-  for (const m of resPairs) { const k = `${m.Campeonato}|${m.Data}|${m.team1_col}|${m.team2_col}`; const old = resMap.get(k); if (!old||m._ts>old._ts) resMap.set(k,m); }
+  for (const m of resPairs) { const k = `${m.Campeonato}|${m.DataKey}|${m.team1_col}|${m.team2_col}`; const old = resMap.get(k); if (!old||m._ts>old._ts) resMap.set(k,m); }
   const results = Array.from(resMap.values());
 
   // predictions
@@ -272,7 +276,7 @@ function extractPairs(rows){
     palps.push({Palpiteiro:r[cPalp], Campeonato:r[cLiga], Data:r[cData], team1_col:c1, team1:t1, p1:n1, team2_col:c2, team2:t2, p2:n2, _ts:tsOf(r)});
   }
   const palpMap = new Map();
-  for (const p of palps) { const k = `${p.Palpiteiro}|${p.Campeonato}|${p.Data}|${p.team1_col}|${p.team2_col}`; const old=palpMap.get(k); if(!old||p._ts>old._ts) palpMap.set(k,p); }
+  for (const p of palps) { const k = `${p.Palpiteiro}|${p.Campeonato}|${p.DataKey}|${p.team1_col}|${p.team2_col}`; const old=palpMap.get(k); if(!old||p._ts>old._ts) palpMap.set(k,p); }
   return {results:Array.from(palpMap.keys()) && results, palps:Array.from(palpMap.values())}; // 'results' defined above
 }
 
@@ -288,7 +292,11 @@ async function bootstrap(){
     const cData = cols.find(c => /data.*jogo|data/i.test(c));
     const cPalp = cols.find(c => /palpiteiro|participante|respondente/i.test(c));
     const tsOf = r => new Date(r[cTS]).getTime() || 0;
-    const isResultado = r => String(r[cPalp]||'').trim().toLowerCase()==='resultado';
+    const isResultado = r => {
+    const valPalp = String(r[cPalp]||'').trim().toLowerCase();
+    const valTipo = cTipo ? String(r[cTipo]||'').trim().toLowerCase() : '';
+    return valPalp === 'resultado' || valTipo === 'resultado';
+  };
 
     // results (last only)
     const resPairs = [];
@@ -299,7 +307,7 @@ async function bootstrap(){
       const t1 = c1.match(patTeamCol)[1], t2 = c2.match(patTeamCol)[1];
       resPairs.push({Campeonato:r[cLiga], Data:r[cData], team1_col:c1, team1:t1, g1:Number(g1), team2_col:c2, team2:t2, g2:Number(g2), _ts:tsOf(r)});
     }
-    const resMap = new Map(); for (const m of resPairs) { const k = `${m.Campeonato}|${m.Data}|${m.team1_col}|${m.team2_col}`; const old=resMap.get(k); if(!old||m._ts>old._ts) resMap.set(k,m); }
+    const resMap = new Map(); for (const m of resPairs) { const k = `${m.Campeonato}|${m.DataKey}|${m.team1_col}|${m.team2_col}`; const old=resMap.get(k); if(!old||m._ts>old._ts) resMap.set(k,m); }
     const results = Array.from(resMap.values());
 
     // palps (last only)
@@ -313,11 +321,11 @@ async function bootstrap(){
       if (Number.isNaN(n1) || Number.isNaN(n2)) continue;
       palpsRaw.push({Palpiteiro:r[cPalp], Campeonato:r[cLiga], Data:r[cData], team1_col:c1, team1:t1, p1:n1, team2_col:c2, team2:t2, p2:n2, _ts:tsOf(r)});
     }
-    const palpMap = new Map(); for (const p of palpsRaw) { const k = `${p.Palpiteiro}|${p.Campeonato}|${p.Data}|${p.team1_col}|${p.team2_col}`; const old=palpMap.get(k); if(!old||p._ts>old._ts) palpMap.set(k,p); }
+    const palpMap = new Map(); for (const p of palpsRaw) { const k = `${p.Palpiteiro}|${p.Campeonato}|${p.DataKey}|${p.team1_col}|${p.team2_col}`; const old=palpMap.get(k); if(!old||p._ts>old._ts) palpMap.set(k,p); }
     const palps = Array.from(palpMap.values());
 
     // matches union
-    const mkey = m => `${m.Campeonato}|${m.Data}|${m.team1_col}|${m.team2_col}`;
+    const mkey = m => `${m.Campeonato}|${m.DataKey}|${m.team1_col}|${m.team2_col}`;
     const matchMap = new Map();
     for (const r of results) matchMap.set(mkey(r), r);
     for (const p of palps) if (!matchMap.has(mkey(p))) matchMap.set(mkey(p), p);

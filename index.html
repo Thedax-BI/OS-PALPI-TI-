@@ -12,21 +12,21 @@
 .h1{font-size:22px;font-weight:900;letter-spacing:.3px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 .muted{color:var(--muted)}
 .row{display:grid;gap:12px}
-@media(min-width:960px){.row{grid-template-columns:1.15fr .85fr}}
 .card{background:linear-gradient(180deg, rgba(96,165,250,.12), transparent 35%), var(--card);border:1px solid var(--line);border-radius:16px;padding:12px;box-shadow:0 8px 30px rgba(0,0,0,.2)}
 .filters{display:grid;gap:8px;grid-template-columns:1fr 1fr; margin-bottom:8px}
 @media(min-width:680px){.filters{grid-template-columns:1fr 1fr 1fr 1fr}}
 select,input{background:#0a1224;border:1px solid #1e293b;border-radius:12px;padding:10px;color:var(--text);width:100%}
-.tblWrap{overflow:auto}
+.tblWrap{overflow:auto; max-height:68vh}
 .tbl{width:100%;border-collapse:separate;border-spacing:0;min-width:0}
-.tbl th,.tbl td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:middle;white-space:normal}
+.tbl th,.tbl td{padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:middle;white-space:normal;line-height:1.2}
 .tbl th{font-size:12px;letter-spacing:.3px;text-transform:uppercase;color:var(--muted);position:sticky;top:0;background:var(--card)}
-.kpi{display:grid;gap:8px;grid-template-columns:repeat(3,1fr)}
+#tblDetalhe thead{display:none}
+.kpi{display:grid;gap:8px;grid-template-columns:repeat(3,1fr); margin-bottom:6px}
 @media(min-width:680px){.kpi{grid-template-columns:repeat(6,1fr)}}
 .k{background:#0a1224;border:1px solid var(--line);border-radius:12px;padding:10px}
 .k b{display:block;font-size:18px;margin-top:2px}
-.crestBox{display:flex;gap:8px;align-items:center;min-width:220px;flex-wrap:wrap}
-.crest{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-weight:900;border:2px solid #223;box-shadow:0 6px 14px rgba(0,0,0,.25);overflow:hidden;flex:0 0 auto}
+.crestBox{display:flex;gap:6px;align-items:center;min-width:220px;flex-wrap:nowrap;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.crest{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-weight:900;border:2px solid #223;box-shadow:0 6px 14px rgba(0,0,0,.25);overflow:hidden;flex:0 0 auto}
 .crest img{width:100%;height:100%;object-fit:cover;display:block}
 .crest.fallback.t1{background:radial-gradient(circle at 30% 30%, #7dd3fc, #1e3a8a)}
 .crest.fallback.t2{background:radial-gradient(circle at 30% 30%, #fca5a5, #7c2d12)}
@@ -39,12 +39,21 @@ select,input{background:#0a1224;border:1px solid #1e293b;border-radius:12px;padd
 .btn.ghost{background:transparent;border:1px solid var(--line);color:var(--text)}
 .btnRow{display:grid;gap:8px;grid-template-columns:1fr}
 .small{font-size:12px}
+.rowCards{display:grid;gap:12px}
+@media(min-width:960px){.rowCards{grid-template-columns:2fr 1fr}}
 .gridcards{display:grid;gap:8px;grid-template-columns:repeat(2,1fr);margin-top:8px}
 @media(min-width:680px){.gridcards{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:520px){.gridcards{grid-template-columns:1fr}}
 .cardMatch{background:#0a1224;border:1px solid var(--line);border-radius:14px;padding:10px}
 .matchHead{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:6px;flex-wrap:wrap}
 .teams{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .score{font-weight:900;font-size:16px}
+.gameBlock{border:1px dashed #223; border-radius:12px; padding:10px; margin:8px 0; background:rgba(2,8,23,.35)}
+.gameHead{font-size:12px;color:var(--muted);margin-bottom:4px}
+.gameTitle{display:flex;align-items:center;gap:8px;font-weight:800;margin-bottom:8px}
+.subtbl{width:100%;border-collapse:separate;border-spacing:0}
+.subtbl th,.subtbl td{padding:6px 8px;border-bottom:1px solid #1e293b;vertical-align:middle;white-space:nowrap}
+.subtbl th{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.3px}
 .sticker{font-size:18px;margin-right:6px}
 .toast{position:fixed;right:12px;bottom:12px;background:#111827;border:1px solid #30363d;color:#e5e7eb;padding:10px 12px;border-radius:10px;box-shadow:0 10px 24px rgba(0,0,0,.35);display:none;max-width:70vw}
 .err{background:#1b2437;border:1px solid #3b4861;color:#e2e8f0;padding:10px;border-radius:10px;margin:8px 0}
@@ -53,7 +62,6 @@ select,input{background:#0a1224;border:1px solid #1e293b;border-radius:12px;padd
 <body>
 <div class="wrap">
   <div class="h1">🏆 OS PALPI-TI — Palpites x Resultados <span class="muted" id="status">carregando…</span></div>
-
   <div class="row">
     <div class="card">
       <div class="filters">
@@ -80,12 +88,17 @@ select,input{background:#0a1224;border:1px solid #1e293b;border-radius:12px;padd
         Fonte publicada: <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vTn-RzJIruNHBrurvld5L3zclXN9lWWAPVa90un0PeoJSV7V-1XIq1pRoL_-Mq7PZLS4jWvO4VvF7FC/pubhtml?gid=1746213473&single=true" target="_blank" rel="noopener">pubhtml</a> (leitura via GViz/JSONP sem CORS).
       </div>
     </div>
-
+  </div>
+  <div class="rowCards">
+    <div class="card">
+      <div class="muted small" style="margin-bottom:6px">Jogos</div>
+      <div class="gridcards" id="cards"></div>
+    </div>
     <div class="card">
       <div class="btnRow" style="margin-bottom:8px">
         <button class="btn ghost" id="btnRecarregar">Recarregar</button>
       </div>
-      <div class="tblWrap">
+      <div class="tblWrap" style="max-height:68vh">
         <table class="tbl" id="tblRank">
           <thead><tr>
             <th>Palpiteiro</th><th>Pts</th><th>Exatos</th><th>Vencedor</th><th>Margem</th><th>Provis.</th><th>Erros</th><th>Aprov.</th>
@@ -95,39 +108,25 @@ select,input{background:#0a1224;border:1px solid #1e293b;border-radius:12px;padd
       </div>
     </div>
   </div>
-
-  <div class="card">
-    <div class="muted small" style="margin-bottom:6px">Jogos</div>
-    <div class="gridcards" id="cards"></div>
-  </div>
 </div>
-
 <div class="toast" id="toast">Link copiado!</div>
-
 <script>
-// ======= CONFIG (GViz) =======
 const CONFIG = {
   SHEET_ID: "1BN8qI5_QnTPbpBxd4yT-Ng6qmDChLFhXohHFnY4R5vE",
   SHEET_NAME: "Respostas ao formulário 1",
   CRESTS: {"São Paulo": "https://commons.wikimedia.org/wiki/Special:FilePath/Brasao%20do%20Sao%20Paulo%20Futebol%20Clube.svg", "Sport Club Internacional": "https://commons.wikimedia.org/wiki/Special:FilePath/Escudo%20do%20Sport%20Club%20Internacional.svg", "Internacional": "https://commons.wikimedia.org/wiki/Special:FilePath/Escudo%20do%20Sport%20Club%20Internacional.svg", "Corinthians": "https://commons.wikimedia.org/wiki/Special:FilePath/SC%20Corinthians.svg", "Sport Club Corinthians Paulista": "https://commons.wikimedia.org/wiki/Special:FilePath/SC%20Corinthians.svg", "Fortaleza": "https://commons.wikimedia.org/wiki/Special:FilePath/FortalezaEsporteClube.svg", "Fortaleza EC": "https://commons.wikimedia.org/wiki/Special:FilePath/FortalezaEsporteClube.svg", "Santos": "https://commons.wikimedia.org/wiki/Special:FilePath/Santos%20logo.svg", "EC Juventude": "https://commons.wikimedia.org/wiki/Special:FilePath/EC%20Juventude.svg", "Juventude": "https://commons.wikimedia.org/wiki/Special:FilePath/EC%20Juventude.svg", "Athletico Paranaense": "https://commons.wikimedia.org/wiki/Special:FilePath/Athletico%20Paranaense%20%28Logo%202019%29.svg", "Athletico-PR": "https://commons.wikimedia.org/wiki/Special:FilePath/Athletico%20Paranaense%20%28Logo%202019%29.svg", "Palmeiras": "https://commons.wikimedia.org/wiki/Special:FilePath/Palmeiras%20logo.svg", "Sociedade Esportiva Palmeiras": "https://commons.wikimedia.org/wiki/Special:FilePath/Palmeiras%20logo.svg"}
 };
-// =============================
-
-// JSONP hook do GViz (sem CORS)
 window.google = { visualization: { Query: { setResponse: function(resp){ handleGViz(resp); }}}};
-
 const statusEl = document.getElementById('status');
 const errEl = document.getElementById('err');
 const $ = s => document.querySelector(s);
-
-// ---- Date helpers ----
 function toJSDate(v){
   if (v instanceof Date) return v;
   if (typeof v === 'string'){
     const m = v.match(/^Date\((\d{4}),\s*(\d{1,2}),\s*(\d{1,2})(?:,\s*(\d{1,2}),\s*(\d{1,2}),\s*(\d{1,2}))?\)$/);
     if (m){
       const Y=+m[1], M=+m[2], D=+m[3], h=+(m[4]||0), mi=+(m[5]||0), s=+(m[6]||0);
-      return new Date(Y, M, D, h, mi, s); // GViz já fornece M 0-based
+      return new Date(Y, M, D, h, mi, s);
     }
     const d = new Date(v);
     if (!isNaN(d)) return d;
@@ -137,13 +136,11 @@ function toJSDate(v){
 function pad2(n){ return (n<10?'0':'')+n; }
 function formatDateBR(d){ return pad2(d.getDate()) + '/' + pad2(d.getMonth()+1) + '/' + d.getFullYear(); }
 function dateKey(d){ return d.getFullYear() + '-' + pad2(d.getMonth()+1) + '-' + pad2(d.getDate()); }
-
 function gvizUrl(){
   const base = `https://docs.google.com/spreadsheets/d/${CONFIG.SHEET_ID}/gviz/tq`;
   const params = new URLSearchParams({ tqx: 'out:json', sheet: CONFIG.SHEET_NAME });
   return base + '?' + params.toString();
 }
-
 function loadGViz(){
   return new Promise((resolve, reject) => {
     const s = document.createElement('script');
@@ -154,7 +151,6 @@ function loadGViz(){
     document.head.appendChild(s);
   });
 }
-
 function parseGVizTable(json){
   const cols = json.table?.cols?.map(c => c.label || c.id || '') || [];
   const rows = (json.table?.rows || []).map(r => {
@@ -164,7 +160,6 @@ function parseGVizTable(json){
   });
   return rows;
 }
-
 function handleGViz(resp){
   try{
     const rows = parseGVizTable(resp);
@@ -174,7 +169,6 @@ function handleGViz(resp){
     showError("Não consegui interpretar a resposta do GViz. Confirme o nome da aba no CONFIG.SHEET_NAME.");
   }
 }
-
 function showError(msg){
   statusEl.textContent = 'erro';
   errEl.style.display = 'block';
@@ -182,8 +176,6 @@ function showError(msg){
   1) Em <i>Compartilhar</i>, marque <b>Qualquer pessoa com o link – Leitor</b>.<br>
   2) Se necessário, use <i>Arquivo → Publicar na Web</i> (aba “${CONFIG.SHEET_NAME}”).`;
 }
-
-// Utils
 function crestHTML(teamName, cls){
   const url = CONFIG.CRESTS[teamName] || null;
   if (url) return `<div class="crest"><img src="${url}" alt="escudo ${teamName}" onerror="this.closest('.crest').classList.add('fallback','${cls}'); this.remove();"></div>`;
@@ -197,7 +189,6 @@ function score(p1,p2,g1,g2){ if (g1==null||g2==null||isNaN(g1)||isNaN(g2)) retur
   const ocp=outcome(p1,p2), ocr=outcome(g1,g2);
   if (ocp===ocr) return Math.abs(p1-p2)===Math.abs(g1-g2) ? {status:"Vencedor + margem", pts:1} : {status:"Vencedor", pts:3};
   return {status:"Errou", pts:0}; }
-
 function buildData(rows){
   const cols = Object.keys(rows[0]||{});
   const patTeamCol = /^Selecione o Time A \[(.+)\]$/i;
@@ -207,7 +198,6 @@ function buildData(rows){
   const cData  = cols.find(c => /data.*jogo|data/i.test(c)) || "Data do Jogo";
   const cPalp  = cols.find(c => /palpiteiro|participante|respondente/i.test(c)) || "Palpiteiro";
   const cTipo  = cols.find(c => /lan[cç]amento|tipo/i.test(c));
-
   const isResultado = r => {
     const valPalp = String(r[cPalp]||'').trim().toLowerCase();
     const valTipo = cTipo ? String(r[cTipo]||'').trim().toLowerCase() : '';
@@ -215,8 +205,6 @@ function buildData(rows){
   };
   const toNum = v => (v===''||v==null) ? NaN : Number(String(v).replace(',','.').trim());
   const tsOf = r => { const d=toJSDate(r[cTS])||new Date(r[cTS]); return isNaN(d)?0:d.getTime(); };
-
-  // Resultados – último por jogo
   const resPairs = [];
   rows.filter(isResultado).forEach(r => {
     const filled = teamCols.map(c => [c, toNum(r[c])]).filter(([,v]) => !isNaN(v));
@@ -228,8 +216,6 @@ function buildData(rows){
   });
   const resMap = new Map(); resPairs.forEach(m => { const k = `${m.Campeonato}|${m.DataKey}|${m.team1_col}|${m.team2_col}`; const old=resMap.get(k); if(!old||m._ts>old._ts) resMap.set(k,m); });
   const results = Array.from(resMap.values());
-
-  // Palpites – último por palpiteiro+jogo
   const palpsRaw = [];
   rows.filter(r => !isResultado(r)).forEach(r => {
     const filled = teamCols.map(c => [c, toNum(r[c])]).filter(([,v]) => !isNaN(v));
@@ -241,13 +227,9 @@ function buildData(rows){
   });
   const palpMap = new Map(); palpsRaw.forEach(p => { const k = `${p.Palpiteiro}|${p.Campeonato}|${p.DataKey}|${p.team1_col}|${p.team2_col}`; const old=palpMap.get(k); if(!old||p._ts>old._ts) palpMap.set(k,p); });
   const palps = Array.from(palpMap.values());
-
-  // Union de jogos
   const mkey = m => `${m.Campeonato}|${m.DataKey}|${m.team1_col}|${m.team2_col}`;
   const matchMap = new Map(); results.forEach(r => matchMap.set(mkey(r), r)); palps.forEach(p => { if(!matchMap.has(mkey(p))) matchMap.set(mkey(p), p); });
   const matches = Array.from(matchMap.values());
-
-  // Detalhes com pontuação
   const details = [];
   matches.forEach(m => {
     const g = results.find(x => mkey(x)===mkey(m));
@@ -258,8 +240,6 @@ function buildData(rows){
         Palpiteiro:p.Palpiteiro, p1:p.p1, p2:p.p2, g1:(g1!=null?g1:null), g2:(g2!=null?g2:null), Status:sc.status, Pontos:sc.pts });
     });
   });
-
-  // Ranking
   const byP = new Map();
   details.forEach(r => {
     const it = byP.get(r.Palpiteiro) || {Palpiteiro:r.Palpiteiro, Pts:0, Exatos:0, Vencedor:0, Margem:0, Provisorios:0, Erros:0, Total:0};
@@ -273,10 +253,8 @@ function buildData(rows){
   });
   const rank = Array.from(byP.values()).map(x => Object.assign(x, {Aproveitamento_: Math.round(((x.Exatos+x.Vencedor+x.Margem)/Math.max(1,x.Total))*1000)/10}))
                   .sort((a,b)=> b.Pts - a.Pts || b.Exatos - a.Exatos || b.Vencedor - a.Vencedor || b.Margem - a.Margem || b.Aproveitamento_ - a.Aproveitamento_);
-
   return {details, rank};
 }
-
 function badge(status, pts){
   let cls="pend"; if (status==="Placar exato") cls="ok"; else if (status==="Vencedor") cls="ok"; else if (status==="Vencedor + margem") cls="warn"; else if (status==="Errou") cls="bad";
   return `<span class="badge ${cls}">${status} • ${pts} pts</span>`;
@@ -300,13 +278,11 @@ function renderUI(data){
   const pf = document.getElementById('fPalpiteiro'); palps.forEach(x => pf.insertAdjacentHTML('beforeend', `<option>${x}</option>`));
   const lf = document.getElementById('fLiga'); ligas.forEach(x => lf.insertAdjacentHTML('beforeend', `<option>${x}</option>`));
   const df = document.getElementById('fData'); datas.forEach(x => df.insertAdjacentHTML('beforeend', `<option>${x}</option>`));
-
   const usp = new URLSearchParams(location.search);
   if (usp.get('p')) pf.value = usp.get('p');
   if (usp.get('l')) lf.value = usp.get('l');
   if (usp.get('d')) df.value = usp.get('d');
   if (usp.get('q')) document.getElementById('fBusca').value = usp.get('q');
-
   function applyFilters(rows){
     const p=pf.value, l=lf.value, d=df.value, q=(document.getElementById('fBusca').value||'').trim().toLowerCase();
     return rows.filter(r => (!p||r.Palpiteiro===p) && (!l||r.Campeonato===l) && (!d||r.Data===d) && (!q || (`${r.team1} ${r.team2} ${r.Jogo}`.toLowerCase().includes(q))));
@@ -321,18 +297,38 @@ function renderUI(data){
   function renderDetail(){
     const tbody = document.querySelector('#tblDetalhe tbody');
     const rows = applyFilters(details);
-    tbody.innerHTML = rows.map(r => {
-      const res = (r.g1==null||r.g2==null) ? "—" : `${r.g1} x ${r.g2}`;
-      return `<tr>
-        <td>${r.Data}</td>
-        <td>${r.Campeonato}</td>
-        <td><div class="crestBox">${crestHTML(r.team1,'t1')} ${r.team1} <span class="muted" style="margin:0 6px">x</span> ${crestHTML(r.team2,'t2')} ${r.team2}</div></td>
-        <td>${sticker(r.Palpiteiro)} ${r.Palpiteiro}</td>
-        <td>${r.p1} x ${r.p2}</td>
-        <td>${res}</td>
-        <td>${badge(r.Status, r.Pontos)}</td>
-      </tr>`;
-    }).join('');
+    const groups = new Map();
+    rows.forEach(r => {
+      const key = r.Data + '|' + r.Campeonato + '|' + r.Jogo;
+      if(!groups.has(key)){
+        groups.set(key, {meta:{Data:r.Data, Campeonato:r.Campeonato, team1:r.team1, team2:r.team2, Jogo:r.Jogo}, items:[]});
+      }
+      groups.get(key).items.push(r);
+    });
+    let html = '';
+    groups.forEach(g => {
+      html += `<div class="gameBlock">
+        <div class="gameHead">${g.meta.Data} • ${g.meta.Campeonato}</div>
+        <div class="gameTitle">${crestHTML(g.meta.team1,'t1')} <div>${g.meta.team1}</div><div class="muted" style="margin:0 6px">x</div> ${crestHTML(g.meta.team2,'t2')} <div>${g.meta.team2}</div></div>
+        <table class="subtbl">
+          <thead><tr>
+            <th>Palpiteiro</th><th>Palpite</th><th>Resultado</th><th>Status/Pontos</th>
+          </tr></thead>
+          <tbody>
+            ${g.items.map(r => {
+              const res = (r.g1==null||r.g2==null) ? "—" : `${r.g1} x ${r.g2}`;
+              return `<tr>
+                <td>${sticker(r.Palpiteiro)} ${r.Palpiteiro}</td>
+                <td>${r.p1} x ${r.p2}</td>
+                <td>${res}</td>
+                <td>${badge(r.Status, r.Pontos)}</td>
+              </tr>`;
+            }).join('')}
+          </tbody>
+        </table>
+      </div>`;
+    });
+    tbody.innerHTML = `<tr><td colspan="7">${html}</td></tr>`;
     renderKPI(rows);
   }
   function renderRank(){
@@ -360,14 +356,11 @@ function renderUI(data){
       </div>`;
     }).join('');
   }
-
   document.getElementById('btnReset').addEventListener('click', ()=>{ pf.value=''; lf.value=''; df.value=''; document.getElementById('fBusca').value=''; renderDetail(); });
   document.getElementById('btnRecarregar').addEventListener('click', ()=> location.reload());
   ['fPalpiteiro','fLiga','fData','fBusca'].forEach(id => document.getElementById(id).addEventListener('input', renderDetail));
-
   renderRank(); renderDetail(); renderCards();
 }
-
 async function bootstrap(){
   try{
     statusEl.textContent = 'carregando…';
@@ -381,7 +374,6 @@ async function bootstrap(){
     console.error(e);
   }
 }
-
 bootstrap();
 </script>
 </body>

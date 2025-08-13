@@ -136,8 +136,8 @@ input {
   text-overflow: ellipsis;
 }
 .crest {
-  width: 24px;
-  height: 24px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   display: grid;
   place-items: center;
@@ -146,13 +146,16 @@ input {
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
   overflow: hidden;
   flex: 0 0 auto;
+  /* background-color: rgb(195, 221, 253); */
 }
 .crest img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  width: 75%;
+  height: 75%;
+  object-fit: contain;
+  object-position: center;
   display: block;
 }
+
 .crest.fallback.t1 {
   background: radial-gradient(circle at 30% 30%, #7dd3fc, #1e3a8a);
 }
@@ -237,7 +240,7 @@ input {
 .rowMain {
   display: grid;
   gap: 12px;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: 7fr 5fr;
   margin-bottom: 20px;
 }
 .rowMain > .card {
@@ -324,9 +327,11 @@ input {
   align-items: center;
   gap: 8px;
   font-weight: 800;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   cursor: pointer;
   user-select: none;
+  justify-items: center;
+  margin-top: 10px;
 }
 .gameBlock.collapsed .gameBody {
   display: none;
@@ -370,32 +375,33 @@ input {
   text-align: left;
 }
 .subtbl col.c-palp {
-  width: 48%;
+  width: 21%;
 }
 .subtbl col.c-palpite {
-  width: 18%;
+  width: 15%;
 }
 
 .subtbl col.c-pontos {
-  width: 34%;
+  width: 37%;
 }
 @media (max-width: 820px) {
   .subtbl col.c-palp {
-    width: 48%;
+  width: 21%;
   }
   .subtbl col.c-palpite {
-    width: 18%;
+    width: 15%;
   }
   .subtbl col.c-pontos {
-    width: 34%;
+      width: 21%;
+
   }
 }
 .subtbl col.c-palpite {
-  width: 18%;
+  width: 15%;
 }
 .subtbl col.c-pontos {
-  width: 34%;
-}
+    width: 37%;
+} 
 
 .sticker {
   font-size: 18px;
@@ -421,4 +427,24 @@ input {
   padding: 10px;
   border-radius: 10px;
   margin: 8px 0;
+}
+
+.time_a{
+  display:flex;
+  align-items: center;
+}
+.time_b{
+  display:flex;
+  align-items: center;
+}
+
+/* .time_a div{
+  margin-left: 10px;
+}
+.time_b div{
+ 
+} */
+
+.scoreInline{
+  font-size: 17px;
 }

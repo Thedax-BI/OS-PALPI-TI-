@@ -40,7 +40,7 @@ const CONFIG = {
     "São Paulo": "https://commons.wikimedia.org/wiki/Special:FilePath/Brasao%20do%20Sao%20Paulo%20Futebol%20Clube.svg",
     Santos: "https://commons.wikimedia.org/wiki/Special:FilePath/Santos%20logo.svg",
     Palmeiras: "https://commons.wikimedia.org/wiki/Special:FilePath/Palmeiras%20logo.svg",
-    Corinthians: "https://commons.wikimedia.org/wiki/Special:FilePath/SC%20Corinthians.svg",
+    Corinthians: "https://logodownload.org/wp-content/uploads/2016/11/Corinthians-logo-escudo.png",
     Juventude: "https://commons.wikimedia.org/wiki/Special:FilePath/EC%20Juventude.svg",
     Internacional: "https://commons.wikimedia.org/wiki/Special:FilePath/Escudo%20do%20Sport%20Club%20Internacional.svg",
     Cruzeiro: "https://commons.wikimedia.org/wiki/Special:FilePath/Cruzeiro%20Esporte%20Clube%20%28logo%29.svg",
@@ -68,7 +68,8 @@ const CONFIG = {
     "River Plate": "https://cdn-img.zerozero.pt/img/logos/equipas/2218_imgbank_1686734459.png",
     "Universitário": "https://upload.wikimedia.org/wikipedia/commons/6/67/Logo_oficial_de_Universitario.png",
     Libertad: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Club_Libertad.png/250px-Club_Libertad.png",
-    "LDU Quito": "https://upload.wikimedia.org/wikipedia/commons/e/e1/Liga_de_Quito_deportiva.png"
+    "LDU Quito": "https://upload.wikimedia.org/wikipedia/commons/e/e1/Liga_de_Quito_deportiva.png",
+    "Racing ARG": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Escudo_de_Racing_Club_%282014%29.svg/1200px-Escudo_de_Racing_Club_%282014%29.svg.png"
   },
 };
 
@@ -126,7 +127,7 @@ function dateKey(d) {
 
 function gvizUrl() {
   const base = `https://docs.google.com/spreadsheets/d/${CONFIG.SHEET_ID}/gviz/tq`;
-  console.log(base);
+  // console.log(base);
   const params = new URLSearchParams({
     tqx: "out:json",
     sheet: CONFIG.SHEET_NAME,
@@ -333,7 +334,7 @@ rows.filter(isResultado).forEach((r) => {
   const filled = teamCols
     .map((c) => [c, toNum(r[c])])
     .filter(([, v]) => !isNaN(v));
-console.log("Linha de resultado:", r);
+// console.log("Linha de resultado:", r);
   // Se não tiver pelo menos 2 gols válidos, descarta
   if (filled.length < 0) return;
 
@@ -360,7 +361,7 @@ console.log("Linha de resultado:", r);
     _ts: tsOf(r),
   });
 
-  console.log("Resultado capturado:", resPairs);
+  // console.log("Resultado capturado:", resPairs);
 });
 
   
@@ -505,7 +506,6 @@ function renderKPI(rows) {
     <div class="k"><span class="muted">Palpites</span><b>${tot}</b></div>
     <div class="k"><span class="muted">Exatos</span><b>${ex}</b></div>
     <div class="k"><span class="muted">Vencedor</span><b>${v}</b></div>
-    <div class="k"><span class="muted">Provisórios</span><b>${pr}</b></div>
     <div class="k"><span class="muted">Erros</span><b>${er}</b></div>`;
 }
 function renderUI(data) {
@@ -617,28 +617,35 @@ function renderUI(data) {
         <div class="gameHead">${g.meta.Data} • ${g.meta.Campeonato}</div>
         <div class="gameTitle">
           <span class="caret">▸</span>
-          ${crestHTML(g.meta.team1, "t1")}
-          <div>
-              <div style='width:100px; display:inline-block;'>${g.meta.team1} </div>
-              <span class="scoreInline">
-                ${(() => {
-                  const rr = g.items.find((it) => it.g1 != null && it.g2 != null);
-                  return rr ? rr.g1 : "—";
-                })()}
-              </span>
+          <div class="time_a">
+            ${crestHTML(g.meta.team1, "t1")}
+            <div style='width:150px; margin-left: 20px;'>${g.meta.team1} </div>
+            <span class="scoreInline">
+              ${(() => {
+                const rr = g.items.find((it) => it.g1 != null && it.g2 != null);
+                return rr ? rr.g1 : "—";
+              })()}
+            </span>
           </div>
-          <div class="muted" style="margin:0 6px">x</div>
-          ${crestHTML(g.meta.team2, "t2")}
-          <div>
-            <div style='width:100px; display:inline-block;'>${g.meta.team2} </div>
-            <span class="scoreInline">${(() => {
-        const rr = g.items.find((it) => it.g1 != null && it.g2 != null);
-        return rr ? rr.g2 : "—";
-      })()}</span></div>
-          <div class="resTitle">${(() => {
-            const rr = g.items.find((it) => it.g1 != null && it.g2 != null);
-            return rr ? "" : '<span class="badge pend">Pendente</span>';
-          })()}</div>
+          
+          <div class="muted" style="margin:0 6px">X</div>
+          <div class="time_b">
+            <span class="scoreInline" style="margin-right: 30px;">
+              ${(() => {
+                const rr = g.items.find((it) => it.g1 != null && it.g2 != null);
+                return rr ? rr.g2 : "—";
+              })()}
+            </span>
+            ${crestHTML(g.meta.team2, "t2")}
+            <div style='width:150px;  margin-left: 20px;'>${g.meta.team2} </div>
+            
+          </div>
+          <div class="resTitle">
+            ${(() => {
+              const rr = g.items.find((it) => it.g1 != null && it.g2 != null);
+              return rr ? "" : '<span class="badge pend">Pendente</span>';
+            })()}
+          </div>
         </div>
         <div class="gameBody">
           <table class="subtbl"><colgroup><col class="c-palp"><col class="c-palpite"><col class="c-pontos"></colgroup>
@@ -647,8 +654,8 @@ function renderUI(data) {
               ${g.items
                 .map((r) => {
                   return `<tr>
-                  <td>${sticker(r.Palpiteiro)} ${r.Palpiteiro}</td>
-                  <td>${r.p1} x ${r.p2}</td>
+                  <td style="width:20%">${sticker(r.Palpiteiro)} ${r.Palpiteiro}</td>
+                  <td style="width:10%">${r.p1} x ${r.p2}</td>
                   <td>${badge(r.Status, r.Pontos)}</td>
                 </tr>`;
                 })
@@ -691,7 +698,7 @@ function renderUI(data) {
         <td><b>${x.Pts}</b></td>
         <td>${x.Exatos}</td>
         <td>${x.Vencedor}</td>
-        <td>${x.Provisorios}</td>
+        
         <td>${x.Erros}</td>
         <td>${x.Aproveitamento_}%</td>
       </tr>`
@@ -742,6 +749,7 @@ function renderUI(data) {
   renderRank();
   renderDetail();
   renderCards();
+  document.querySelectorAll(".gameBlock").forEach((b) => b.classList.add("collapsed"));
 }
 
 async function bootstrap() {

@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>OS PALPI-TI</title>
+<meta name="color-scheme" content="dark light">
+<link rel="stylesheet" href="palpiti.css" />
+</head>
+<body>
+<div class="wrap">
+  <div class="h1">🏆 OS PALPI-TI — Palpites x Resultados <span class="muted" id="status">carregando…</span> <span class="muted small">(v19)</span></div>
+
+  <!-- Linha 1: Filtros + Detalhes (rolagem) -->
+
+
+<div class="rowMain-full">
+  <div class="card">
+    <div class="filters">
+      <select id="fPalpiteiro"><option value="">Palpiteiros</option></select>
+      <select id="fLiga"><option value="">Campeonatos</option></select>
+      <select id="fData"><option value="">Datas</option></select>
+      <input id="fBusca" placeholder="Buscar por time/jogo…" />
+      <button class="btn ghost" id="btnReset">Limpar</button>
+      <button class="btn ghost" id="btnReload">Recarregar</button>
+    </div>
+    <div id="err" class="err" style="display:none"></div>
+    <div class="kpi" id="kpi"></div>
+  </div>
+</div>
+<div class="rowMain">
+  <div class="card">
+    <div class="btnRow" style="grid-template-columns:auto auto;justify-content:flex-start;margin:2px 0 6px 0;gap:6px">
+      <button class="btn ghost" id="btnExpandir">Expandir jogos</button>
+      <button class="btn ghost" id="btnRecolher">Recolher jogos</button>
+    </div>
+    <div class="tblWrap">
+      <table class="tbl" id="tblDetalhe">
+        <tpalpiteirohead>
+          <tr>
+            <th>Data</th>
+            <th>Campeonato</th>
+            <th>Jogo</th>
+            <th>Palpiteiro</th>
+            <th>Palpite</th>
+            <th>Status/Pontos</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+    <div class="small muted" style="margin-top:8px">
+      Pontuação: Vencedor = 1 • Vencedor + Placar = 3 • Erro = 0
+    </div>
+  </div>
+  <div class="card" id="cardRanking" style="overflow-x: auto;">
+    <div class="small muted" style="margin:0 0 6px 0">Ranking</div>
+    <div class="tblWrap" style="max-height:68vh">
+      <table class="tbl" id="tblRank" style="text-align: center;">
+        <thead>
+          <tr>
+            <th style="text-align: left;" width="108px">Palpiteiro</th>
+            <th>Pontos</th>
+            <th>Exatos</th>
+            <th>Vencedor</th>
+            <!-- <th>Provis.</th> -->
+            <th>Erros</th>
+            <th>Aprov.</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <!-- <div class="small muted" style="margin-top: 8px;">
+      Ex: Exatos • Ven: Vencedor • Er: Erros
+    </div> -->
+  </div>
+</div>
+<!--   
+<div class="rowMain">
+  <div class="card" id="cardRanking" style="width:600px !important">
+      <div class="small muted" style="margin:0 0 6px 0">Ranking</div>
+      <div class="tblWrap" style="max-height:68vh">
+        <table class="tbl" id="tblRank">
+          <thead><tr>
+            <th>Palpiteiro</th><th>Pts</th><th>Exatos</th><th>Vencedor</th><th>Margem</th><th>Provis.</th><th>Erros</th><th>Aprov.</th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+  </div>
+</div> -->
+<div class="rowMain-full">
+  <div class="row">
+    <div class="card">
+        <div class="muted small" style="margin-bottom:6px">Jogos</div>
+        <div class="gridcards" id="cards"></div>
+      </div>
+  </div>
+</div>
+
+</div>
+
+<div class="toast" id="toast">Link copiado!</div>
+
+<script src="palpiti.js"></script>
+</body>
+</html>

@@ -241,8 +241,15 @@ input {
 .rowMain {
   display: grid;
   gap: 12px;
-  grid-template-columns: 7fr 5fr;
+  grid-template-columns: auto 500px;
+  /* grid-template-rows: 250px 750px; */
   margin-bottom: 20px;
+  grid-template-rows: 250px 550px;
+
+	grid-template:
+		"ranking pendentes"  
+    "palpites pendentes";
+		;
 }
 .rowMain > .card {
   align-self: start;
@@ -273,12 +280,12 @@ input {
 .gridcards {
   display: grid;
   gap: 8px;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: 500px;
   margin-top: 8px;
 }
 @media (min-width: 680px) {
   .gridcards {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: 500px;
   }
 }
 @media (max-width: 520px) {
@@ -453,5 +460,19 @@ input {
 .btn:hover{
   background-color: #0dcaf0;
   color: #061225;
+}
+
+
+.palpites_card{
+  grid-area: palpites;
+}
+
+.pendentes {
+  grid-area: pendentes;
+  height: 100%;
+}
+
+.ranking {
+  grid-area: ranking;
 }
 

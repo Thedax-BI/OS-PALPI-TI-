@@ -9,10 +9,12 @@
 </head>
 <body>
 <div class="wrap">
-
-  <div class="h1">🏆 OS PALPI-TI ⚽ </div>
+  <div class="h1">🏆 OS PALPI-TI ⚽
+  </div>
 
   <!-- Linha 1: Filtros + Detalhes (rolagem) -->
+
+
 <div class="rowMain-full">
   <div class="card">
     <div class="filters">
@@ -31,14 +33,14 @@
   </div>
 </div>
 <div class="rowMain">
-  <div class="card">
+  <div class="card palpites_card">
     <div class="btnRow" style="grid-template-columns:auto auto;justify-content:flex-start;margin:2px 0 6px 0;gap:6px">
       <button class="btn ghost" id="btnExpandir">Expandir jogos</button>
       <button class="btn ghost" id="btnRecolher">Recolher jogos</button>
     </div>
     <div class="tblWrap">
       <table class="tbl" id="tblDetalhe">
-        <thead>
+        <tpalpiteirohead>
           <tr>
             <th>Data</th>
             <th>Campeonato</th>
@@ -56,7 +58,7 @@
       Pontuação: Vencedor = 1 • Vencedor + Placar = 3 • Erro = 0
     </div>
   </div>
-  <div class="card" id="cardRanking" style="overflow-x: auto;">
+  <div class="card ranking" id="cardRanking" style="overflow-x: auto;">
     <div class="small muted" style="margin:0 0 6px 0">Ranking</div>
     <div class="tblWrap" style="max-height:68vh">
       <table class="tbl" id="tblRank" style="text-align: center;">
@@ -78,28 +80,13 @@
       Ex: Exatos • Ven: Vencedor • Er: Erros
     </div> -->
   </div>
-</div>
-<!--   
-<div class="rowMain">
-  <div class="card" id="cardRanking" style="width:600px !important">
-      <div class="small muted" style="margin:0 0 6px 0">Ranking</div>
-      <div class="tblWrap" style="max-height:68vh">
-        <table class="tbl" id="tblRank">
-          <thead><tr>
-            <th>Palpiteiro</th><th>Pts</th><th>Exatos</th><th>Vencedor</th><th>Margem</th><th>Provis.</th><th>Erros</th><th>Aprov.</th>
-          </tr></thead>
-          <tbody></tbody>
-        </table>
-      </div>
+
+  
+  <div class="card pendentes">
+    <div class="muted small" style="margin-bottom:6px">Jogos pendentes</div>
+    <div class="gridcards" id="cards"></div>
   </div>
-</div> -->
-<div class="rowMain-full">
-  <div class="row">
-    <div class="card">
-        <div class="muted small" style="margin-bottom:6px">Jogos</div>
-        <div class="gridcards" id="cards"></div>
-      </div>
-  </div>
+  
 </div>
 
 </div>

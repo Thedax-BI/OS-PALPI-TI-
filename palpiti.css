@@ -3,7 +3,7 @@
   --card: #0f172a;
   --muted: #94a3b8;
   --text: #e5e7eb;
-  --line: #1f2937;
+  --line: #0dcaf0;
   --accent: #60a5fa;
   --ok: #22c55e;
   --warn: #f59e0b;
@@ -52,18 +52,18 @@ body {
 .filters {
   display: grid;
   gap: 8px;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
   margin-bottom: 8px;
 }
 @media (min-width: 680px) {
   .filters {
-    grid-template-columns: 1fr 1fr 1fr 1fr auto auto;
+    grid-template-columns: repeat(6, 1fr);
   }
 }
 select,
 input {
   background: #0a1224;
-  border: 1px solid #1e293b;
+  border: 1px solid #0dcaf0;
   border-radius: 10px;
   padding: 8px;
   color: var(--text);
@@ -119,6 +119,7 @@ input {
   border: 1px solid var(--line);
   border-radius: 12px;
   padding: 8px;
+  text-align: center;
 }
 .k b {
   display: block;
@@ -311,7 +312,7 @@ input {
 }
 /* Blocos de jogo no detalhe */
 .gameBlock {
-  border: 1px dashed #223;
+  border: 1px dashed #f8f9fa;
   border-radius: 12px;
   padding: 6px;
   margin: 8px 0;
@@ -448,3 +449,9 @@ input {
 .scoreInline{
   font-size: 17px;
 }
+
+.btn:hover{
+  background-color: #0dcaf0;
+  color: #061225;
+}
+

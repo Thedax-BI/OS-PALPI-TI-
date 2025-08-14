@@ -86,7 +86,7 @@ window.google = {
   },
 };
 
-const statusEl = document.getElementById("status");
+// const statusEl = document.getElementById("status");
 const errEl = document.getElementById("err");
 const $ = (s) => document.querySelector(s);
 
@@ -172,7 +172,7 @@ function handleGViz(resp) {
 }
 
 function showError(msg) {
-  statusEl.textContent = "erro";
+  // statusEl.textContent = "erro";
   errEl.style.display = "block";
   errEl.innerHTML = `<b>Não consegui ler a planilha.</b><br>${msg}<br><br><b>Checklist rápido:</b><br>
   1) Em <i>Compartilhar</i>, marque <b>Qualquer pessoa com o link – Leitor</b>.<br>
@@ -506,7 +506,8 @@ function renderKPI(rows) {
     <div class="k"><span class="muted">Palpites</span><b>${tot}</b></div>
     <div class="k"><span class="muted">Exatos</span><b>${ex}</b></div>
     <div class="k"><span class="muted">Vencedor</span><b>${v}</b></div>
-    <div class="k"><span class="muted">Erros</span><b>${er}</b></div>`;
+    <div class="k"><span class="muted">Erros</span><b>${er}</b></div>
+    <button class="btn ghost" id="btnReload">Recarregar</button>`;
 }
 function renderUI(data) {
   const details = data.details.slice();
@@ -705,33 +706,59 @@ function renderUI(data) {
       )
       .join("");
   }
-  function renderCards() {
-    const uniq = new Map();
-    details.forEach((r) => {
-      const key = r.Data + "|" + r.Campeonato + "|" + r.Jogo;
-      if (!uniq.has(key)) uniq.set(key, r);
-    });
-    const rows = Array.from(uniq.values());
-    document.getElementById("cards").innerHTML = rows
-      .map((r) => {
-        const res =
-          r.g1 == null || r.g2 == null
-            ? '<span class="badge pend">Pendente</span>'
-            : `<span class="score">${r.g1} x ${r.g2}</span>`;
-        return `<div class="cardMatch">
-        <div class="matchHead"><div class="muted small">${r.Data} • ${
-          r.Campeonato
-        }</div><div>${res}</div></div>
-        <div class="teams">${crestHTML(r.team1, "t1")} <div>${
-          r.team1
-        }</div><div class="muted" style="margin:0 8px">x</div>${crestHTML(
-          r.team2,
-          "t2"
-        )} <div>${r.team2}</div></div>
-      </div>`;
-      })
-      .join("");
-  }
+  // function renderCards() {
+  //   const uniq = new Map();
+  //   details.forEach((r) => {
+  //     const key = r.Data + "|" + r.Campeonato + "|" + r.Jogo;
+  //     if (!uniq.has(key)) uniq.set(key, r);
+  //   });
+  //   const rows = Array.from(uniq.values());
+  //   document.getElementById("cards").innerHTML = rows.map((r) => {
+  //       const res = r.g1 == null || r.g2 == null
+  //           ? '<span class="badge pend">Pendente</span>'
+  //           : `<span class="score">${r.g1} x ${r.g2}</span>`;
+  //       return `<div class="cardMatch">
+  //       <div class="matchHead"><div class="muted small">${r.Data} • ${
+  //         r.Campeonato
+  //       }</div><div>${res}</div></div>
+  //       <div class="teams">${crestHTML(r.team1, "t1")} <div>${
+  //         r.team1
+  //       }</div><div class="muted" style="margin:0 8px">x</div>${crestHTML(
+  //         r.team2,
+  //         "t2"
+  //       )} <div>${r.team2}</div></div>
+  //     </div>`;
+  //     })
+  //     .join("");
+  // }
+
+function renderCards() {
+  const uniq = new Map();
+  details.forEach((r) => {
+    const key = r.Data + "|" + r.Campeonato + "|" + r.Jogo;
+    if (!uniq.has(key)) uniq.set(key, r);
+  });
+  const rows = Array.from(uniq.values())
+    .filter(r => r.g1 == null || r.g2 == null); // só pendentes
+
+  document.getElementById("cards").innerHTML = rows.map((r) => {
+    const res = r.g1 == null || r.g2 == null
+      ? '<span class="badge pend">Pendente</span>'
+      : `<span class="score">${r.g1} x ${r.g2}</span>`;
+    return `<div class="cardMatch">
+      <div class="matchHead">
+        <div class="muted small">${r.Data} • ${r.Campeonato}</div>
+        <div>${res}</div>
+      </div>
+      <div class="teams">
+        ${crestHTML(r.team1, "t1")} <div>${r.team1}</div>
+        <div class="muted" style="margin:0 8px">x</div>
+        ${crestHTML(r.team2, "t2")} <div>${r.team2}</div>
+      </div>
+    </div>`;
+  }).join("");
+}
+
 
   document.getElementById("btnReset").addEventListener("click", () => {
     pf.value = "";
@@ -754,12 +781,12 @@ function renderUI(data) {
 
 async function bootstrap() {
   try {
-    statusEl.textContent = "carregando…";
+    // statusEl.textContent = "carregando…";
     const rows = await loadGViz();
     const data = buildData(rows);
     // console.log(rows);
     renderUI(data);
-    statusEl.textContent = `ok • ${rows.length} respostas`;
+    // statusEl.textContent = `ok • ${rows.length} respostas`;
     errEl.style.display = "none";
   } catch (e) {
     showError(e.message || "Falha ao carregar.");

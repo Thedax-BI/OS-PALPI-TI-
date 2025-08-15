@@ -503,10 +503,10 @@ function renderKPI(rows) {
     pr = rows.filter((r) => r.Status.startsWith("Pendente")).length,
     er = rows.filter((r) => r.Status === "Errou").length;
   document.getElementById("kpi").innerHTML = `
-    <div class="k"><span class="muted">Palpites</span><b>${tot}</b></div>
-    <div class="k"><span class="muted">Exatos</span><b>${ex}</b></div>
-    <div class="k"><span class="muted">Vencedor</span><b>${v}</b></div>
-    <div class="k"><span class="muted">Erros</span><b>${er}</b></div>
+    <div class="k k1"><span class="muted">Palpites</span><b>${tot}</b></div>
+    <div class="k k2"><span class="muted">Exatos</span><b>${ex}</b></div>
+    <div class="k k3"><span class="muted">Vencedor</span><b>${v}</b></div>
+    <div class="k k4"><span class="muted">Erros</span><b>${er}</b></div>
     <button class="btn ghost" id="btnReload">Recarregar</button>`;
 }
 function renderUI(data) {
@@ -620,7 +620,7 @@ function renderUI(data) {
           <span class="caret">▸</span>
           <div class="time_a">
             ${crestHTML(g.meta.team1, "t1")}
-            <div style='width:150px; margin-left: 20px;'>${g.meta.team1} </div>
+            <div class='times_style'>${g.meta.team1} </div>
             <span class="scoreInline">
               ${(() => {
                 const rr = g.items.find((it) => it.g1 != null && it.g2 != null);
@@ -631,14 +631,14 @@ function renderUI(data) {
           
           <div class="muted" style="margin:0 6px">X</div>
           <div class="time_b">
-            <span class="scoreInline" style="margin-right: 30px;">
+            <span class="scoreInline" style="margin-right: 10%;">
               ${(() => {
                 const rr = g.items.find((it) => it.g1 != null && it.g2 != null);
                 return rr ? rr.g2 : "—";
               })()}
             </span>
             ${crestHTML(g.meta.team2, "t2")}
-            <div style='width:150px;  margin-left: 20px;'>${g.meta.team2} </div>
+            <div class='times_style'>${g.meta.team2} </div>
             
           </div>
           <div class="resTitle">
@@ -695,16 +695,22 @@ function renderUI(data) {
       .map(
         (x) => `
       <tr>
-        <td style="text-align: left;">${sticker(x.Palpiteiro)} ${x.Palpiteiro}</td>
-        <td><b>${x.Pts}</b></td>
-        <td>${x.Exatos}</td>
-        <td>${x.Vencedor}</td>
-        
-        <td>${x.Erros}</td>
-        <td>${x.Aproveitamento_}%</td>
+        <td style="text-align: left !important;">${sticker(x.Palpiteiro)} ${x.Palpiteiro}</td>
+        <td style="text-align: center;"><b>${x.Pts}</b></td>
+        <td style="text-align: center;">${x.Exatos}</td>
+        <td style="text-align: center;">${x.Vencedor}</td>
+        <td style="text-align: center;">${x.Erros}</td>
+        <td style="text-align: center;">${x.Aproveitamento_}%</td>
       </tr>`
       )
       .join("");
+    new DataTable('#tblRank', {
+      paging: false,
+      searching: false,
+      info: false,
+      ordering: true,
+      lengthChange: false
+    });
   }
   // function renderCards() {
   //   const uniq = new Map();

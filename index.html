@@ -5,9 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>OS PALPI-TI</title>
 <meta name="color-scheme" content="dark light">
+<!-- <link rel="stylesheet" href="//cdn.datatables.net/2.3.2/css/dataTables.dataTables.min.css" /> -->
+
+<link href="https://cdn.datatables.net/v/bs5/jq-3.7.0/dt-2.3.2/datatables.css" rel="stylesheet" integrity="sha384-DHfRT7IADXUtfJt9UlJ57gGivhA9NXjQVQtoacky9nsGHmeCRZQs1MljjVj1CuK+" crossorigin="anonymous">
 <link rel="stylesheet" href="palpiti.css" />
+ 
+
 </head>
 <body>
+
 <div class="wrap">
   <div class="h1">🏆 OS PALPI-TI ⚽
   </div>
@@ -40,7 +46,7 @@
     </div>
     <div class="tblWrap">
       <table class="tbl" id="tblDetalhe">
-        <tpalpiteirohead>
+        <thead>
           <tr>
             <th>Data</th>
             <th>Campeonato</th>
@@ -64,13 +70,13 @@
       <table class="tbl" id="tblRank" style="text-align: center;">
         <thead>
           <tr>
-            <th style="text-align: left;" width="108px">Palpiteiro</th>
-            <th>Pontos</th>
-            <th>Exatos</th>
-            <th>Vencedor</th>
-            <!-- <th>Provis.</th> -->
-            <th>Erros</th>
-            <th>Aprov.</th>
+            <th style="text-align: left !important;">Palpiteiro</th>
+            <th style="text-align: center;">Pontos</th>
+            <th style="text-align: center;">Exatos</th>
+            <th style="text-align: center;">Vencedor</th>
+            <!-- <th style="text-align: center;">Provis.</th> -->
+            <th style="text-align: center;">Erros</th>
+            <th style="text-align: center;">Aprov.</th>
           </tr>
         </thead>
         <tbody></tbody>
@@ -93,6 +99,17 @@
 
 <div class="toast" id="toast">Link copiado!</div>
 
+<script src="https://cdn.datatables.net/v/bs5/jq-3.7.0/dt-2.3.2/datatables.js" integrity="sha384-DA1VDOrvQW+7GkqOnsz7qYRxjwbBkJyttZr2k4HZ0jNUycpIj672TIWg5McQYl7D" crossorigin="anonymous"></script>
 <script src="palpiti.js"></script>
+<!-- <script>
+  let table = new DataTable('#tblRank', {
+    paging: false,      // sem paginação
+    searching: false,   // sem campo de busca
+    info: false,        // sem contador "Mostrando X de Y"
+    ordering: true,     // mantém ordenação pelo clique no cabeçalho
+    lengthChange: false // sem menu para mudar quantidade de linhas
+  });
+</script> -->
+
 </body>
 </html>

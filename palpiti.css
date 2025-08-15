@@ -49,17 +49,57 @@ body {
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
   min-width: 0;
 }
+
+/* .rowMain {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: auto 500px;
+
+  margin-bottom: 20px;
+  grid-template-rows: 250px 550px;
+
+	grid-template:
+		"ranking pendentes"  
+    "palpites pendentes";
+		;
+}
+.rowMain > .card {
+  align-self: start;
+  min-width: 0;
+}
+@media (max-width: 900px) {
+  .rowMain {
+    grid-template-columns: 1fr !important;
+    grid-template:
+		"ranking"  
+    "palpites"
+    "pendentes";
+		;
+  }
+  
+} */
+
 .filters {
   display: grid;
   gap: 8px;
-  grid-template-columns: repeat(3, 1fr);
   margin-bottom: 8px;
+  
+  /* Mobile (padrão) */
+  grid-template-areas:
+    "busca_palpiteiro busca_liga"
+    "busca_data busca_busca"
+    "busca_reset busca_reset";
+  grid-template-columns: 1fr 1fr; /* 2 colunas no mobile */
 }
-@media (min-width: 680px) {
+
+@media (min-width: 1080px) {
   .filters {
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-areas:
+      "busca_palpiteiro busca_liga busca_data busca_busca busca_reset";
+    grid-template-columns: 220px 220px 220px 220px 1fr; /* 5 colunas no desktop */
   }
 }
+
 select,
 input {
   background: #0a1224;
@@ -103,15 +143,24 @@ input {
 #tblDetalhe > thead {
   display: none;
 }
+
+
 .kpi {
   display: grid;
   gap: 8px;
-  grid-template-columns: repeat(3, 1fr);
+  /* grid-template-columns: repeat(3, 1fr); */
   margin-bottom: 6px;
+  grid-template-areas:
+  "k1 k2"
+  "k3 k4"
+  "btnReload btnReload";
+  grid-template-columns: 1fr 1fr; /* 2 colunas no mobile */
 }
-@media (min-width: 680px) {
+@media (min-width: 1080px) {
   .kpi {
-    grid-template-columns: repeat(6, 1fr);
+  /* grid-template-columns: repeat(6, 1fr); */
+    grid-template-columns: 220px 220px 220px 220px 1fr; /* 5 colunas no desktop */
+
   }
 }
 .k {
@@ -258,7 +307,13 @@ input {
 @media (max-width: 900px) {
   .rowMain {
     grid-template-columns: 1fr !important;
+    grid-template:
+		"ranking"  
+    "palpites"
+    "pendentes";
+		;
   }
+  
 }
 
 .rowMain-full {
@@ -289,6 +344,13 @@ input {
   }
 }
 @media (max-width: 520px) {
+  .times_style{
+    width: auto !important;
+    margin-left: 0px !important;
+  }
+  .times_style:nth-child(0){
+    margin-right: 20px !important;
+  }
   .gridcards {
     grid-template-columns: 1fr;
   }
@@ -476,3 +538,257 @@ input {
   grid-area: ranking;
 }
 
+.times_style{
+  width:150px; 
+  margin-left: 20px;
+}
+
+/* ===========================
+   Força: ícone SEMPRE à DIREITA
+   =========================== */
+#tblRank.dataTable thead th .dt-column-header {
+  display: flex !important;
+  flex-direction: row !important;     /* força ordem esquerda->direita */
+  align-items: center !important;
+  justify-content: center !important; /* ou flex-start se quiser à esquerda */
+  gap: .35rem !important;
+  direction: ltr !important;
+}
+
+/* garante que o título venha primeiro e o ícone depois (ícone à direita) */
+#tblRank.dataTable thead th .dt-column-title { order: 1 !important; }
+#tblRank.dataTable thead th .dt-column-order { 
+  order: 2 !important;
+  position: relative !important;
+  float: none !important;
+  margin: 0 !important;
+}
+
+/* Algumas colunas numéricas têm regras próprias — forçamos também */
+#tblRank.dataTable thead th.dt-type-numeric .dt-column-header {
+  flex-direction: row !important;
+}
+
+/* remove pseudo-ícones que o DataTables possa inserir via ::before/::after */
+#tblRank.dataTable thead th::before,
+#tblRank.dataTable thead th::after {
+  display: none !important;
+}
+
+/* (opcional) deixa tudo centralizado — remova se não quiser isso */
+#tblRank.dataTable thead th,
+#tblRank.dataTable tbody td {
+  text-align: center !important;
+}
+
+#fPalpiteiro{
+  grid-area: busca_palpiteiro;
+}
+#fLiga{
+  grid-area: busca_liga;
+}
+
+#fData{
+  grid-area: busca_data;
+}
+
+#fBusca{
+  grid-area: busca_busca;
+}
+
+#btnReset{
+  grid-area: busca_reset;
+}
+
+#k1{
+  grid-area: k1;
+}
+#k2{
+  grid-area: k2;
+}
+
+#k3{
+  grid-area: k3;
+}
+
+#k4{
+  grid-area: k4;
+}
+
+#btnReload{
+  grid-area: btnReload;
+}
+
+
+/* Responsive Tables */
+@media (max-width: 768px) {
+  .tblWrap {
+    overflow-x: auto;
+    max-height: none;
+  }
+
+  .tbl {
+    min-width: 100%;
+  }
+
+  .tbl th,
+  .tbl td {
+    padding: 4px;
+    font-size: 12px;
+  }
+
+  .subtbl {
+    display: block;
+    width: 100%;
+  }
+
+  .subtbl colgroup,
+  .subtbl col {
+    display: none;
+  }
+
+  .subtbl thead {
+    display: none;
+  }
+
+  .subtbl tbody,
+  .subtbl tr {
+    display: block;
+  }
+
+  .subtbl tr {
+    margin-bottom: 8px;
+    padding: 4px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: rgba(10, 18, 36, 0.5);
+  }
+
+  .subtbl td {
+    display: block;
+    text-align: left;
+    padding: 2px 4px;
+    border: none;
+    white-space: normal;
+    overflow: visible;
+    width: 100% !important; /* Override inline widths */
+  }
+
+  .subtbl td:nth-child(1)::before {
+    content: "Palpiteiro: ";
+    font-weight: 700;
+    color: var(--muted);
+    display: block;
+  }
+
+  .subtbl td:nth-child(2)::before {
+    content: "Palpite: ";
+    font-weight: 700;
+    color: var(--muted);
+    display: block;
+  }
+
+  .subtbl td:nth-child(3)::before {
+    content: "Pontuação: ";
+    font-weight: 700;
+    color: var(--muted);
+    display: block;
+  }
+
+  .subtbl td {
+    font-size: 12px;
+  }
+
+  .badge {
+    font-size: 10px;
+    padding: 2px 4px;
+    display: inline-block;
+    margin-top: 2px;
+  }
+}
+
+/* Responsive Game Block and Title */
+@media (max-width: 520px) {
+  .gameTitle {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    text-align: center;
+  }
+
+  .time_a,
+  .time_b {
+    flex-direction: row;
+    align-items: center;
+    width: auto;
+    gap: 4px;
+  }
+
+  .times_style {
+    width: auto !important;
+    max-width: 100px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-left: 4px !important;
+    margin-right: 4px !important;
+    font-size: 12px;
+  }
+
+  .scoreInline {
+    font-size: 14px;
+    margin: 0 4px !important;
+  }
+
+  .muted[style*="margin:0 6px"] {
+    margin: 0 4px !important;
+    font-size: 14px;
+  }
+
+  .crest {
+    width: 28px;
+    height: 28px;
+  }
+
+  .crest img {
+    width: 90%;
+    height: 90%;
+  }
+
+  .btnRow {
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+
+  .btn.ghost {
+    padding: 6px 8px;
+    font-size: 12px;
+    min-height: 36px;
+  }
+
+  .palpites_card {
+    padding: 8px;
+  }
+
+  .card {
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  }
+
+  .gameBlock {
+    margin: 8px 0;
+    padding: 6px;
+    border-radius: 8px;
+  }
+
+  .gameHead {
+    font-size: 11px;
+    text-align: center;
+  }
+
+  .gameBody {
+    margin-top: 6px;
+  }
+}

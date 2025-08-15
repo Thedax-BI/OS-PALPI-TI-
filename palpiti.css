@@ -157,8 +157,9 @@ input {
   grid-template-columns: 1fr 1fr; /* 2 colunas no mobile */
 }
 @media (min-width: 1080px) {
-  .kpi {
-  /* grid-template-columns: repeat(6, 1fr); */
+  .kpi {  
+    grid-template-areas:
+    "k1 k2 k3 k4 btnReload btnReload";
     grid-template-columns: 220px 220px 220px 220px 1fr; /* 5 colunas no desktop */
 
   }
@@ -734,17 +735,17 @@ input {
     text-overflow: ellipsis;
     margin-left: 4px !important;
     margin-right: 4px !important;
-    font-size: 12px;
+    font-size: 10px;
   }
 
   .scoreInline {
-    font-size: 14px;
+    font-size: 10px;
     margin: 0 4px !important;
   }
 
   .muted[style*="margin:0 6px"] {
     margin: 0 4px !important;
-    font-size: 14px;
+    font-size: 10px;
   }
 
   .crest {

@@ -709,7 +709,8 @@ function renderUI(data) {
       searching: false,
       info: false,
       ordering: true,
-      lengthChange: false
+      lengthChange: false,
+      order: [[1, 'desc']]
     });
   }
   // function renderCards() {
@@ -773,8 +774,7 @@ function renderCards() {
     document.getElementById("fBusca").value = "";
     renderDetail();
   });
-  const _btnReload = document.getElementById("btnReload");
-  if (_btnReload) _btnReload.addEventListener("click", () => location.reload());
+
   ["fPalpiteiro", "fLiga", "fData", "fBusca"].forEach((id) =>
     document.getElementById(id).addEventListener("input", renderDetail)
   );
@@ -782,8 +782,11 @@ function renderCards() {
   renderRank();
   renderDetail();
   renderCards();
+  const _btnReload = document.getElementById("btnReload");
+  if (_btnReload) _btnReload.addEventListener("click", () => location.reload());
   document.querySelectorAll(".gameBlock").forEach((b) => b.classList.add("collapsed"));
 }
+
 
 async function bootstrap() {
   try {

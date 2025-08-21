@@ -72,7 +72,7 @@ const CONFIG = {
     "Racing ARG": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Escudo_de_Racing_Club_%282014%29.svg/1200px-Escudo_de_Racing_Club_%282014%29.svg.png"
   },
 };
-
+var premiacao = ['R$ 180,00', 'R$ 90,00', 'R$ 30,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00'];
 // =============================
 
 // JSONP hook do GViz (sem CORS)
@@ -691,7 +691,7 @@ function renderUI(data) {
 
   function renderRank() {
     const r = data.rank;
-    premiacao = ['R$ 180,00', 'R$ 90,00', 'R$ 30,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00'];
+    var premiacao = ['R$ 180,00', 'R$ 90,00', 'R$ 30,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00'];
     document.querySelector("#tblRank tbody").innerHTML = r
       .map(
         (x, i) => `

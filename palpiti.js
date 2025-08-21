@@ -691,9 +691,10 @@ function renderUI(data) {
 
   function renderRank() {
     const r = data.rank;
+    premiacao = ['R$ 180,00', 'R$ 90,00', 'R$ 30,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00'];
     document.querySelector("#tblRank tbody").innerHTML = r
       .map(
-        (x) => `
+        (x, i) => `
       <tr>
         <td style="text-align: left !important;">${sticker(x.Palpiteiro)} ${x.Palpiteiro}</td>
         <td style="text-align: center;"><b>${x.Pts}</b></td>
@@ -701,6 +702,7 @@ function renderUI(data) {
         <td style="text-align: center;">${x.Vencedor}</td>
         <td style="text-align: center;">${x.Erros}</td>
         <td style="text-align: center;">${x.Aproveitamento_}%</td>
+        <td style="text-align: center;">${premiacao[i]}</td>
       </tr>`
       )
       .join("");
@@ -713,6 +715,7 @@ function renderUI(data) {
       order: [[1, 'desc']]
     });
   }
+
   // function renderCards() {
   //   const uniq = new Map();
   //   details.forEach((r) => {
@@ -773,6 +776,7 @@ function renderCards() {
     df.value = "";
     document.getElementById("fBusca").value = "";
     renderDetail();
+    document.querySelectorAll(".gameBlock").forEach((b) => b.classList.add("collapsed"));
   });
 
   ["fPalpiteiro", "fLiga", "fData", "fBusca"].forEach((id) =>

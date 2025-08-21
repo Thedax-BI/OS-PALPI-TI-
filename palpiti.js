@@ -696,24 +696,26 @@ function renderUI(data) {
       .map(
         (x, i) => `
       <tr>
-        <td style="text-align: left !important;">${sticker(x.Palpiteiro)} ${x.Palpiteiro}</td>
-        <td style="text-align: center;"><b>${x.Pts}</b></td>
-        <td style="text-align: center;">${x.Exatos}</td>
-        <td style="text-align: center;">${x.Vencedor}</td>
-        <td style="text-align: center;">${x.Erros}</td>
-        <td style="text-align: center;">${x.Aproveitamento_}%</td>
-        <td style="text-align: center;">${premiacao[i]}</td>
+        <td>${sticker(x.Palpiteiro)} ${x.Palpiteiro}</td>
+        <td><b>${x.Pts}</b></td>
+        <td>${x.Exatos}</td>
+        <td>${x.Vencedor}</td>
+        <td>${x.Erros}</td>
+        <td>${x.Aproveitamento_}%</td>
+        <td>${premiacao[i]}</td>   // << coluna 7
       </tr>`
       )
       .join("");
-    new DataTable('#tblRank', {
-      paging: false,
-      searching: false,
-      info: false,
-      ordering: true,
-      lengthChange: false,
-      order: [[1, 'desc']]
-    });
+      new DataTable('#tblRank', {
+        paging: false,
+        searching: false,
+        info: false,
+        ordering: true,
+        lengthChange: false,
+        order: [[1, 'desc']],
+        columns: null
+      });
+
   }
 
   // function renderCards() {

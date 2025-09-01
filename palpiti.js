@@ -72,7 +72,7 @@ const CONFIG = {
     "Racing ARG": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Escudo_de_Racing_Club_%282014%29.svg/1200px-Escudo_de_Racing_Club_%282014%29.svg.png"
   },
 };
-var premiacao = ['R$ 180,00', 'R$ 90,00', 'R$ 30,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00'];
+var premiacao = ['R$ 180,00', 'R$ 90,00', 'R$ 30,00', 'R$ 0,00'];
 // =============================
 
 // JSONP hook do GViz (sem CORS)
@@ -689,34 +689,88 @@ function renderUI(data) {
     renderKPI(rows);
   }
 
-  function renderRank() {
-    const r = data.rank;
-    var premiacao = ['R$ 180,00', 'R$ 90,00', 'R$ 30,00', 'R$ 0,00', 'R$ 0,00', 'R$ 0,00'];
-    document.querySelector("#tblRank tbody").innerHTML = r
-      .map(
-        (x, i) => `
-      <tr>
-        <td>${sticker(x.Palpiteiro)} ${x.Palpiteiro}</td>
-        <td><b>${x.Pts}</b></td>
-        <td>${x.Exatos}</td>
-        <td>${x.Vencedor}</td>
-        <td>${x.Erros}</td>
-        <td>${x.Aproveitamento_}%</td>
-        <td>${premiacao[i]}</td>   // << coluna 7
-      </tr>`
-      )
-      .join("");
-      new DataTable('#tblRank', {
-        paging: false,
-        searching: false,
-        info: false,
-        ordering: true,
-        lengthChange: false,
-        order: [[1, 'desc']],
-        columns: null
-      });
+  // function renderRank() {
+    // const r = data.rank;
+  // const sorted = [...data.rank].sort((a, b) => Number(b.Pts) - Number(a.Pts));
 
+  // var premiacao = ['R$ 180,00', 'R$ 90,00', 'R$ 30,00'];
+  // const tbody = document.querySelector("#tblRank tbody");
+  // tbody.innerHTML = sorted.map((x, i) => `
+  //   <tr>
+  //     <td>${sticker(x.Palpiteiro)} ${x.Palpiteiro}</td>
+  //     <td data-order="${Number(x.Pts)}"><b>${x.Pts}</b></td>
+  //     <td data-order="${Number(x.Exatos)}">${x.Exatos}</td>
+  //     <td data-order="${Number(x.Vencedor)}">${x.Vencedor}</td>
+  //     <td data-order="${Number(x.Erros)}">${x.Erros}</td>
+  //     <td data-order="${Number(x.Aproveitamento_)}">${x.Aproveitamento_}%</td>
+  //     <td>${premiacao[i] || 'R$ 0,00'}</td>
+  //   </tr>
+  // `).join("");
+  // new DataTable('#tblRank', {
+  //   paging: false,
+  //   searching: false,
+  //   info: false,
+  //   ordering: true,
+  //   lengthChange: false,
+  //   order: [[1, 'desc']]
+  // });
+
+// }
+function parseNumber(v) {
+  if (v == null) return 0;
+  if (typeof v === 'number') return v;
+  const s = String(v).trim().replace(/[^\d.,-]/g, '');
+  if (!s) return 0;
+  if (s.indexOf(',') > -1 && s.indexOf('.') > -1) {
+    return parseFloat(s.replace(/\./g, '').replace(',', '.')) || 0;
   }
+  if (s.indexOf(',') > -1) {
+    return parseFloat(s.replace(',', '.')) || 0;
+  }
+  return parseFloat(s) || 0;
+}
+
+function renderRank() {
+  const premiacao = ['R$ 180,00', 'R$ 90,00', 'R$ 30,00','R$ 0,00'];
+
+  // ordenação fixa com critérios de desempate
+  const sorted = [...data.rank].sort((a, b) =>
+    parseNumber(b.Pts) - parseNumber(a.Pts) ||
+    parseNumber(b.Exatos) - parseNumber(a.Exatos) ||
+    parseNumber(b.Vencedor) - parseNumber(a.Vencedor) ||
+    parseNumber(b.Aproveitamento_) - parseNumber(a.Aproveitamento_)
+  );
+
+  // monta tabela com premiação fixa
+  document.querySelector("#tblRank tbody").innerHTML = sorted.map((x, i) => `
+    <tr>
+      <td>${sticker(x.Palpiteiro)} ${x.Palpiteiro}</td>
+      <td data-order="${parseNumber(x.Pts)}"><b>${x.Pts}</b></td>
+      <td data-order="${parseNumber(x.Exatos)}">${x.Exatos}</td>
+      <td data-order="${parseNumber(x.Vencedor)}">${x.Vencedor}</td>
+      <td data-order="${parseNumber(x.Erros)}">${x.Erros}</td>
+      <td data-order="${parseNumber(x.Aproveitamento_)}">${x.Aproveitamento_}%</td>
+      <td>${premiacao[i] || ''}</td>
+    </tr>
+  `).join("");
+
+  // destrói instância antiga
+  // if (DataTable.isDataTable('#tblRank')) {
+  //   DataTable.tables({ api: true }).destroy();
+  // }
+
+  // // inicializa DataTable (apenas para navegação e ordenação visual)
+  // new DataTable('#tblRank', {
+  //   paging: false,
+  //   searching: false,
+  //   info: false,
+  //   ordering: true,
+  //   lengthChange: false,
+  //   order: [[1, 'desc']]
+  // });
+}
+
+
 
   // function renderCards() {
   //   const uniq = new Map();

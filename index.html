@@ -1,0 +1,586 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Palpites - Formulário</title>
+  <style>
+    :root{
+      --bg:#0b1220;
+      --card:#111a2e;
+      --muted:#9fb0d0;
+      --text:#eaf0ff;
+      --line:#213154;
+      --accent:#4b8bff;
+      --danger:#ff5c73;
+      --ok:#35d07f;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 800px at 20% 10%, #14234a 0%, var(--bg) 55%);
+      color: var(--text);
+      min-height:100vh;
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+      padding:32px 16px;
+    }
+    .wrap{width:100%; max-width:860px;}
+    header{
+      display:flex; align-items:flex-end; justify-content:space-between;
+      gap:16px; margin-bottom:16px;
+    }
+    h1{font-size:22px; margin:0; letter-spacing:.2px;}
+    .subtitle{margin:6px 0 0; color:var(--muted); font-size:13px;}
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:18px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    }
+    form{display:grid; gap:14px;}
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap:12px;
+    }
+    .field{
+      grid-column: span 12;
+      display:flex; flex-direction:column; gap:6px;
+    }
+    label{
+      font-size:12px;
+      color: var(--muted);
+      letter-spacing:.2px;
+    }
+    select, input[type="date"], input[type="number"]{
+      background:#0c162b;
+      color:var(--text);
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:10px 12px;
+      outline:none;
+    }
+    select:focus, input:focus{
+      border-color: rgba(75,139,255,.7);
+      box-shadow: 0 0 0 3px rgba(75,139,255,.15);
+    }
+    .row-match{
+      grid-column: span 12;
+      display:grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items:end;
+      gap:12px;
+      padding-top:4px;
+    }
+    .x{
+      padding:0 6px 10px;
+      color: var(--muted);
+      font-weight:700;
+      letter-spacing:1px;
+      text-align:center;
+      min-width:24px;
+    }
+    .row-gols{
+      grid-column: span 12;
+      display:grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items:end;
+      gap:12px;
+      margin-top:-4px;
+      padding-bottom:4px;
+    }
+    .golsWrap{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+    .golsLabel{
+      font-size:12px;
+      color: var(--muted);
+    }
+    .golsInput{
+      width:100%;
+    }
+    .radios{
+      display:flex; gap:12px; flex-wrap:wrap;
+      background:#0c162b;
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:10px 12px;
+    }
+    .radio{
+      display:flex; align-items:center; gap:8px;
+      font-size:13px; color: var(--text);
+    }
+    .radio input{accent-color: var(--accent);}
+    .actions{
+      display:flex; gap:10px; flex-wrap:wrap;
+      align-items:center; justify-content:space-between;
+      margin-top:4px;
+    }
+    button{
+      cursor:pointer;
+      border:0;
+      border-radius:12px;
+      padding:10px 14px;
+      font-weight:700;
+      background: linear-gradient(135deg, var(--accent), #7aa8ff);
+      color:#061024;
+    }
+    button:disabled{
+      cursor:not-allowed;
+      opacity:.55;
+      filter:saturate(.6);
+    }
+    .hint{color:var(--muted); font-size:12px;}
+    .msg{
+      margin-top:12px;
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background:#0c162b;
+      font-size:13px;
+      display:none;
+    }
+    .msg.ok{border-color: rgba(53,208,127,.5)}
+    .msg.err{border-color: rgba(255,92,115,.55)}
+    pre{
+      margin:12px 0 0;
+      padding:12px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:#0a1326;
+      overflow:auto;
+      font-size:12px;
+      color:#cfe0ff;
+      display:none;
+    }
+    @media (min-width: 720px){
+      .field.col6{grid-column: span 6;}
+    }
+    .teamLine{
+        display:flex;
+        gap:10px;
+        align-items:center;
+        }
+    .golsMini{
+        width:84px;
+        text-align:center;
+    }
+    .teamSearch{
+        flex:1;
+        background:#0c162b;
+        color:var(--text);
+        border:1px solid var(--line);
+        border-radius:12px;
+        padding:10px 12px;
+        outline:none;
+    }
+    .teamSearch:focus{
+        border-color: rgba(75,139,255,.7);
+        box-shadow: 0 0 0 3px rgba(75,139,255,.15);
+    }
+
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <h1>Palpites de Futebol</h1>
+        <p class="subtitle">Formulário interno (pré-integração). Depois a gente envia para o Google Sheets.</p>
+      </div>
+    </header>
+
+    <div class="card">
+      <form id="form">
+        <div class="grid">
+          <div class="field col6">
+            <label for="nome">Nome</label>
+            <select id="nome" name="nome" required>
+              <option value="" selected disabled>Selecione…</option>
+              <option>Resultado</option>
+              <option>Igor Florense</option>
+              <option>Jésse Diniz</option>
+              <option>Sérgio Da Silva</option>
+              <option>Diego Gavioli</option>
+              <option>Matheus Luz</option>
+            </select>
+          </div>
+
+          <div class="field col6">
+            <label for="dataJogo">Data do jogo</label>
+            <input id="dataJogo" name="dataJogo" type="date" required />
+          </div>
+
+          <div class="field col6">
+            <label for="competicao">Competição</label>
+            <select id="competicao" name="competicao" required>
+              <option value="" selected disabled>Selecione…</option>
+              <option value="paulistao">Paulistão</option>
+              <option value="brasileirao">Brasileirão</option>
+              <option value="libertadores">Libertadores</option>
+              <option value="copa_do_brasil">Copa do Brasil</option>
+              <option value="sulamericana">Sul-Americana</option>
+            </select>
+          </div>
+
+          <div class="field col6">
+            <label>Tipo de lançamento</label>
+            <div class="radios" role="radiogroup" aria-label="Tipo de lançamento">
+              <label class="radio">
+                <input type="radio" name="tipoLancamento" value="resultado" required />
+                Resultado
+              </label>
+              <label class="radio">
+                <input type="radio" name="tipoLancamento" value="palpite" required />
+                Palpite
+              </label>
+            </div>
+          </div>
+
+          <!-- TIME + GOLS (com busca) -->
+<div class="row-match">
+  <div class="field">
+    <label>Mandante</label>
+    <div class="teamLine">
+      <input
+        class="golsMini"
+        id="golsMandante"
+        name="golsMandante"
+        type="number"
+        min="0"
+        max="30"
+        step="1"
+        placeholder="0"
+        required
+      />
+      <input
+        class="teamSearch"
+        id="mandante"
+        name="mandante"
+        list="listMandante"
+        placeholder="Buscar time…"
+        required
+        disabled
+      />
+      <datalist id="listMandante"></datalist>
+    </div>
+  </div>
+
+  <div class="x">X</div>
+
+            <div class="field">
+                <label>Visitante</label>
+                <div class="teamLine">
+                <input
+                    class="golsMini"
+                    id="golsVisitante"
+                    name="golsVisitante"
+                    type="number"
+                    min="0"
+                    max="30"
+                    step="1"
+                    placeholder="0"
+                    required
+                />
+                <input
+                    class="teamSearch"
+                    id="visitante"
+                    name="visitante"
+                    list="listVisitante"
+                    placeholder="Buscar time…"
+                    required
+                    disabled
+                />
+                <datalist id="listVisitante"></datalist>
+                </div>
+            </div>
+            </div>
+
+
+        </div>
+
+        <div class="actions">
+          <div class="hint" id="hint">Escolha a competição para carregar os times.</div>
+          <div>
+              <button onClick="window.location.reload()" id="btnRefresh">Limpar</button>
+              <button id="btnEnviar" type="submit">Enviar</button>
+            </div>
+        </div>
+
+        <div id="msg" class="msg"></div>
+        <pre id="preview"></pre>
+      </form>
+    </div>
+  </div>
+  <iframe name="gas_iframe" style="display:none"></iframe>
+
+
+  <script>
+    const TIMES_POR_COMPETICAO = {
+      paulistao: [
+        "Corinthians","Palmeiras","São Paulo","Santos",
+        "Bragantino","Guarani","Ponte Preta","Novorizontino",
+        "Mirassol","Portuguesa","Botafogo-SP","São Bernardo", 
+        "Primavera", "Capivariano", "Velo Clube", "Noroeste"
+      ],
+      brasileirao: [
+        "Atlético-MG","Bahia","Botafogo","Bragantino","Corinthians","Cruzeiro",
+        "Cuiabá","Flamengo","Fluminense","Fortaleza","Grêmio","Internacional",
+        "Juventude","Palmeiras","São Paulo","Santos","Vasco"
+      ],
+      libertadores: [
+        "Boca Juniors","River Plate","Peñarol","Nacional","Colo-Colo",
+        "Flamengo","Palmeiras","São Paulo","Grêmio","Atlético-MG"
+      ],
+      copa_do_brasil: [
+        "Flamengo","Palmeiras","São Paulo","Corinthians","Grêmio",
+        "Cruzeiro","Atlético-MG","Internacional","Fortaleza","Bahia"
+      ],
+      sulamericana: [
+        "Athletico-PR","América-MG","Defensa y Justicia","Independiente",
+        "LDU","Racing","San Lorenzo","Universidad Católica","Cerro Porteño"
+      ],
+    };
+
+    const el = (id) => document.getElementById(id);
+
+    const form = el("form");
+    const nome = el("nome");
+    const dataJogo = el("dataJogo");
+    const competicao = el("competicao");
+    const mandante = el("mandante");     // agora é input
+    const visitante = el("visitante");   // agora é input
+    const listMandante = el("listMandante");
+    const listVisitante = el("listVisitante");
+    const golsMandante = el("golsMandante");
+    const golsVisitante = el("golsVisitante");
+    const lblGolsMandante = el("lblGolsMandante");
+    const lblGolsVisitante = el("lblGolsVisitante");
+
+    const btnEnviar = el("btnEnviar");
+    const btnRefresh = el("btnRefresh");
+    const msg = el("msg");
+    const preview = el("preview");
+    const hint = el("hint");
+
+    btnRefresh.addEventListener("click", () => {
+      window.location.reload();
+    });
+    function resetTeamInput(teamInput, dataListEl, placeholderText) {
+        teamInput.value = "";
+        teamInput.placeholder = placeholderText;
+        dataListEl.innerHTML = "";
+    }
+
+    function preencherTimes() {
+        const comp = competicao.value;
+        const times = TIMES_POR_COMPETICAO[comp] || [];
+
+        resetTeamInput(mandante, listMandante, "Buscar time…");
+        resetTeamInput(visitante, listVisitante, "Buscar time…");
+
+        for (const t of times) {
+            const o1 = document.createElement("option");
+            o1.value = t;
+            listMandante.appendChild(o1);
+
+            const o2 = document.createElement("option");
+            o2.value = t;
+            listVisitante.appendChild(o2);
+        }
+
+        mandante.disabled = times.length === 0;
+        visitante.disabled = times.length === 0;
+
+        hint.textContent = times.length
+            ? `Times carregados: ${times.length}. Digite para buscar e selecione.`
+            : "Sem times cadastrados para essa competição.";
+
+        validarFormulario();
+        }
+
+    function bloquearTimeIgual() {
+    // aqui só valida (não tem como desabilitar opção no datalist)
+    validarFormulario();
+    }
+
+    function labelsGols() {
+      const tipo = form.tipoLancamento?.value || "";
+      if (tipo === "resultado") {
+        lblGolsMandante.textContent = "Gols (resultado) — mandante";
+        lblGolsVisitante.textContent = "Gols (resultado) — visitante";
+      } else if (tipo === "palpite") {
+        lblGolsMandante.textContent = "Gols (palpite) — mandante";
+        lblGolsVisitante.textContent = "Gols (palpite) — visitante";
+      } else {
+        lblGolsMandante.textContent = "Gols do mandante";
+        lblGolsVisitante.textContent = "Gols do visitante";
+      }
+    }
+
+    function intOrNull(v) {
+      if (v === "" || v === null || v === undefined) return null;
+      const n = Number(v);
+      if (!Number.isFinite(n)) return null;
+      if (!Number.isInteger(n)) return null;
+      return n;
+    }
+
+    function validarFormulario() {
+      msg.style.display = "none";
+      msg.className = "msg";
+      preview.style.display = "none";
+
+      labelsGols();
+
+      const tipo = form.tipoLancamento?.value || "";
+      const gm = intOrNull(golsMandante.value);
+      const gv = intOrNull(golsVisitante.value);
+
+      const ok =
+        nome.value &&
+        dataJogo.value &&
+        competicao.value &&
+        mandante.value &&
+        visitante.value &&
+        mandante.value !== visitante.value &&
+        tipo &&
+        gm !== null &&
+        gv !== null &&
+        gm >= 0 && gv >= 0;
+
+      btnEnviar.disabled = !ok;
+
+      if (mandante.value && visitante.value && mandante.value === visitante.value) {
+        msg.textContent = "Mandante e visitante não podem ser o mesmo time.";
+        msg.classList.add("err");
+        msg.style.display = "block";
+      }
+
+      if ((gm !== null && gm < 0) || (gv !== null && gv < 0)) {
+        msg.textContent = "Gols não podem ser negativos.";
+        msg.classList.add("err");
+        msg.style.display = "block";
+      }
+    }
+
+    competicao.addEventListener("change", () => {
+      preencherTimes();
+      bloquearTimeIgual();
+    });
+    
+    mandante.addEventListener("input", () => {
+        bloquearTimeIgual();
+        validarFormulario();
+    });
+
+    visitante.addEventListener("input", () => {
+        bloquearTimeIgual();
+        validarFormulario();
+    });
+
+    form.addEventListener("change", validarFormulario);
+    form.addEventListener("input", validarFormulario);
+
+    dataJogo.addEventListener("focus", () => dataJogo.showPicker?.());
+    dataJogo.addEventListener("click", () => dataJogo.showPicker?.());
+
+
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        function nowSaoPauloIso() {
+            const parts = new Intl.DateTimeFormat("sv-SE", {
+                timeZone: "America/Sao_Paulo",
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+                hour12: false
+            }).formatToParts(new Date());
+
+            const get = (t) => parts.find(p => p.type === t)?.value;
+
+            // sv-SE dá formato YYYY-MM-DD e HH:mm:ss bem “amigável” pra montar
+            return `${get("year")}-${get("month")}-${get("day")}T${get("hour")}:${get("minute")}:${get("second")}-03:00`;
+        }
+
+        // uso:
+        // const HorarioBrasil = nowSaoPauloIso();
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwcDeFMSgDzcqOe3AGpYHaHxS2-76Qd1V4GiJKRzs1YLSR_d5UONKuds7Zr144epdKkEw/exec";
+        const SECRET = "ODam2CcITWgs6UH1eWgqIczul0JktfMjOif5kiOFi5t5rD457BXepCtdQTOda5F8";
+
+        const createdAtBR = new Intl.DateTimeFormat("pt-BR", {
+            timeZone: "America/Sao_Paulo",
+            dateStyle: "short",
+            timeStyle: "medium"
+            }).format(new Date());
+
+            // ex: "12/01/2026 12:05:33"
+
+        const payload = {
+            nome: nome.value,
+            dataJogo: dataJogo.value,
+            competicao: competicao.value,
+            mandante: mandante.value,
+            visitante: visitante.value,
+            golsMandante: Number(golsMandante.value),
+            golsVisitante: Number(golsVisitante.value),
+            tipoLancamento: form.tipoLancamento.value,
+            createdAt: createdAtBR,
+        };
+
+        // mostra somente o JSON (como você pediu)
+        msg.className = "msg ok";
+        msg.textContent = "Enviado ✅";
+        msg.style.display = "block";
+
+        preview.textContent = JSON.stringify(payload, null, 2);
+        preview.style.display = "block";
+        console.log(createdAtBR)
+        // envia para o Apps Script (sem esperar retorno)
+        const body = new URLSearchParams({
+            secret: SECRET,
+            nome: payload.nome,
+            dataJogo: payload.dataJogo,
+            competicao: payload.competicao,
+            mandante: payload.mandante,
+            golsMandante: String(payload.golsMandante),
+            visitante: payload.visitante,
+            golsVisitante: String(payload.golsVisitante),
+            tipoLancamento: payload.tipoLancamento,
+            // createdAt não precisa (o GAS já registra), mas pode mandar:
+            createdAt: payload.createdAtBR,
+        });
+
+        try {
+            await fetch(SCRIPT_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
+            body,
+            });
+        } catch (err) {
+            // opcional: você pode ignorar totalmente erros também,
+            // mas deixei uma mensagem caso o browser falhe o envio.
+            msg.className = "msg err";
+            msg.textContent = "Falha ao enviar (verifique conexão/URL do script).";
+            msg.style.display = "block";
+        }
+    });
+
+
+
+    resetSelect(mandante, "Selecione a competição…");
+    resetSelect(visitante, "Selecione a competição…");
+    validarFormulario();
+  </script>
+</body>
+</html>

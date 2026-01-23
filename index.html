@@ -184,6 +184,29 @@
         border-color: rgba(75,139,255,.7);
         box-shadow: 0 0 0 3px rgba(75,139,255,.15);
     }
+    .dashboardBtn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      margin-top:24px;
+      padding:12px 20px;
+      background: linear-gradient(135deg, #35d07f, #2ab86d);
+      color:#061024;
+      text-decoration:none;
+      border-radius:12px;
+      font-weight:700;
+      font-size:14px;
+      letter-spacing:.3px;
+      transition:all .25s ease;
+      box-shadow: 0 4px 12px rgba(53,208,127,.3);
+    }
+    .dashboardBtn:hover{
+      transform:translateY(-2px);
+      box-shadow: 0 6px 16px rgba(53,208,127,.4);
+    }
+    .dashboardBtn:active{
+      transform:translateY(0);
+    }
 
   </style>
 </head>
@@ -205,8 +228,6 @@
               <option value="" selected disabled>Selecione…</option>
               <option>Resultado</option>
               <option>Igor Florense</option>
-              <option>Enzo Rodrigues</option>
-              <option>Lucas Gay</option>
               <option>Jésse Diniz</option>
               <option>Sérgio Da Silva</option>
               <option>Diego Gavioli</option>
@@ -314,12 +335,12 @@
               <button id="btnEnviar" type="submit">Enviar</button>
             </div>
         </div>
-        <a href="dashboard.html">Dashboard</a>
-
+        
         <div id="msg" class="msg"></div>
         <pre id="preview"></pre>
       </form>
     </div>
+    <a href="dashboard.html" class="dashboardBtn">Dashboard</a>
   </div>
   <iframe name="gas_iframe" style="display:none"></iframe>
 
@@ -587,5 +608,3 @@
   </script>
 </body>
 </html>
-
-

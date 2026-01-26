@@ -4,7 +4,7 @@
 // =====================================================
 
 const CONFIG = {
-  SCRIPT_URL: "https://script.google.com/macros/s/AKfycbwcDeFMSgDzcqOe3AGpYHaHxS2-76Qd1V4GiJKRzs1YLSR_d5UONKuds7Zr144epdKkEw/exec",
+  SCRIPT_URL: "https://script.google.com/macros/s/AKfycbwaCT1JaglH0MAVtbr9VErA6PW8gQ-1_nQx6re9gzNnDSXSO9GLk8qc1O_w9mb1_B11WQ/exec",
   SECRET: "ODam2CcITWgs6UH1eWgqIczul0JktfMjOif5kiOFi5t5rD457BXepCtdQTOda5F8",
 
   // Labels bonitos

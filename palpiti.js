@@ -65,7 +65,9 @@ function gameKey(r) {
 }
 
 function badge(cls, text) {
-  return `<span class="badge ${cls}">${escapeHtml(text)}</span>`;
+  const icons = { ok: "✓", warn: "⚽", bad: "✗", pend: "⏱", primary: "✔" };
+  const icon = icons[cls] ? `<span>${icons[cls]}</span>` : "";
+  return `<span class="badge ${cls}">${icon}${escapeHtml(text)}</span>`;
 }
 
 // Crest map vindo da aba times
@@ -280,33 +282,60 @@ function renderFilterOptions(allGames, allRows) {
 }
 
 function renderKpis(kpis) {
+  const icons = { palpites: "📊", exatos: "✓", vencedor: "⚽", erros: "✗" };
   elKpi.innerHTML = `
-    <div class="k" style="grid-area:k1"><span class="muted small">Palpites</span><b>${kpis.palpites}</b></div>
-    <div class="k" style="grid-area:k2"><span class="muted small">Exatos</span><b>${kpis.exatos}</b></div>
-    <div class="k" style="grid-area:k3"><span class="muted small">Vencedor</span><b>${kpis.vencedor}</b></div>
-    <div class="k" style="grid-area:k4"><span class="muted small">Erros</span><b>${kpis.erros}</b></div>
+    <div class="k" style="grid-area:k1">
+      <span class="icon">${icons.palpites}</span>
+      <span class="muted small">Palpites</span>
+      <b>${kpis.palpites}</b>
+    </div>
+    <div class="k" style="grid-area:k2">
+      <span class="icon">${icons.exatos}</span>
+      <span class="muted small">Exatos</span>
+      <b>${kpis.exatos}</b>
+    </div>
+    <div class="k" style="grid-area:k3">
+      <span class="icon">${icons.vencedor}</span>
+      <span class="muted small">Vencedor</span>
+      <b>${kpis.vencedor}</b>
+    </div>
+    <div class="k" style="grid-area:k4">
+      <span class="icon">${icons.erros}</span>
+      <span class="muted small">Erros</span>
+      <b>${kpis.erros}</b>
+    </div>
     <button class="btn ghost" id="btnReload" style="grid-area:btnReload">Recarregar</button>
   `;
   $("#btnReload").addEventListener("click", () => init(true));
 }
 
 function renderRanking(rank) {
-  elRankBody.innerHTML = rank.map((r, i) => `
+  elRankBody.innerHTML = rank.map((r, i) => {
+    const aprBar = r.apr.toFixed(1);
+    const barWidth = Math.min(aprBar, 100);
+    return `
     <tr>
       <td style="text-align:left">
-        <div style="display:flex; align-items:center; gap:8px;">
-          <span style="opacity:.9">${i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : "🎮"}</span>
+        <div style="display:flex; align-items:center; gap:10px;">
+          <span style="opacity:.9; font-size:18px">${i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : "🎮"}</span>
           <b>${escapeHtml(r.nome)}</b>
         </div>
       </td>
-      <td><b>${r.pts}</b></td>
-      <td>${r.exa}</td>
-      <td>${r.ven}</td>
-      <td>${r.err}</td>
-      <td>${r.apr.toFixed(1)}%</td>
-      <td>${escapeHtml(r.prm)}</td>
+      <td><b style="font-size:18px; color:#60a5fa">${r.pts}</b></td>
+      <td><span class="badge ok" style="background:none;border:none;color:#4ade80;padding:0">${r.exa}</span></td>
+      <td><span class="badge warn" style="background:none;border:none;color:#fbbf24;padding:0">${r.ven}</span></td>
+      <td><span class="badge bad" style="background:none;border:none;color:#f87171;padding:0">${r.err}</span></td>
+      <td>
+        <div style="display:flex; flex-direction:column; gap:2px; align-items:center">
+          <span style="font-weight:900">${aprBar}%</span>
+          <div style="width:60px; height:6px; background:rgba(96,165,250,0.1); border-radius:3px; overflow:hidden">
+            <div style="width:${barWidth}%; height:100%; background:linear-gradient(90deg,#60a5fa,#93c5fd); border-radius:3px"></div>
+          </div>
+        </div>
+      </td>
+      <td style="color:#4ade80; font-weight:700">${escapeHtml(r.prm)}</td>
     </tr>
-  `).join("") || `<tr><td colspan="7" class="muted">Sem dados.</td></tr>`;
+  `}).join("") || `<tr><td colspan="7" class="muted">Sem dados.</td></tr>`;
 }
 
 function renderPendentes(games) {
@@ -314,13 +343,27 @@ function renderPendentes(games) {
     .filter(g => !g.resultado && g.palpites.length > 0)
     .sort((a, b) => String(b.dataJogo).localeCompare(String(a.dataJogo)));
 
-  elCards.innerHTML = pend.map(g => {
-    const compLbl = CONFIG.COMP_LABEL[g.competicao] || g.competicao;
-    console.log(g)
-    return `
+  if (pend.length === 0) {
+    elCards.innerHTML = `<div class="muted small">Nenhum jogo pendente para os filtros atuais.</div>`;
+    return;
+  }
+
+  // Agrupar por competição
+  const byComp = new Map();
+  for (const g of pend) {
+    if (!byComp.has(g.competicao)) byComp.set(g.competicao, []);
+    byComp.get(g.competicao).push(g);
+  }
+
+  let html = `<div class="pendentes-grouped">`;
+  
+  for (const [comp, games] of byComp) {
+    const compLbl = CONFIG.COMP_LABEL[comp] || comp;
+    const cardsHtml = games.map(g => `
       <div class="cardMatch">
         <div class="matchHead">
-          <div class="muted small">${escapeHtml(formatDateBR(g.dataJogo))} • ${escapeHtml(compLbl)}</div>
+          <div class="muted small">${escapeHtml(formatDateBR(g.dataJogo))}</div>
+          <div class="matchCounters">${g.palpites.length} 📝</div>
           ${badge("pend", "Pendente")}
         </div>
         <div class="teams">
@@ -328,16 +371,25 @@ function renderPendentes(games) {
             ${crestHTML(g.mandante, g.competicao, "t1")}
             <b class="times_style">${escapeHtml(g.mandante)}</b>
           </div>
-          <span class="muted" style="font-weight:900">x</span>
+          <span class="muted" style="font-weight:900; font-size:16px">×</span>
           <div class="crestBox">
             ${crestHTML(g.visitante, g.competicao, "t2")}
             <b class="times_style">${escapeHtml(g.visitante)}</b>
           </div>
         </div>
-        <div class="muted small" style="margin-top:6px">${g.palpites.length} palpite(s) lançado(s)</div>
+      </div>
+    `).join("");
+
+    html += `
+      <div class="comp-group">
+        <div class="comp-group-title">${escapeHtml(compLbl)}</div>
+        <div class="gridcards">${cardsHtml}</div>
       </div>
     `;
-  }).join("") || `<div class="muted small">Nenhum jogo pendente para os filtros atuais.</div>`;
+  }
+  
+  html += `</div>`;
+  elCards.innerHTML = html;
 }
 
 function renderDetalhe(games) {
@@ -351,6 +403,16 @@ function renderDetalhe(games) {
     const placar = `${r.golsMandante} x ${r.golsVisitante}`;
 
     const picks = (g.palpites || []).slice().sort((a, b) => a.nome.localeCompare(b.nome));
+    
+    // Calcular resumo de acertos
+    let countExato = 0, countVencedor = 0, countErro = 0;
+    picks.forEach(p => {
+      const s = scorePick(p, r);
+      if (s.exato) countExato++;
+      if (s.vencedor) countVencedor++;
+      if (s.erro) countErro++;
+    });
+
     const rows = picks.map(p => {
       const s = scorePick(p, r);
       return `
@@ -386,6 +448,13 @@ function renderDetalhe(games) {
               </div>
 
               <div style="margin-left:auto">${badge("primary", "Resultado")}</div>
+            </div>
+
+            <div class="gameSummary">
+              <span><span style="color:#4ade80">✓${countExato}</span></span>
+              <span><span style="color:#fbbf24">⚽${countVencedor}</span></span>
+              <span><span style="color:#f87171">✗${countErro}</span></span>
+              <span class="muted">${picks.length} palpite${picks.length !== 1 ? 's' : ''}</span>
             </div>
 
             <div class="gameBody">
@@ -467,6 +536,37 @@ async function init(forceReload = false) {
 function renderAll() {
   const filtered = applyFilters(ALL_GAMES);
   const { rank, kpis } = buildRanking(filtered);
+
+  // Mostrar filtros ativos
+  const activeFilters = [];
+  if (fPalpiteiro.value) activeFilters.push({ label: `Palpiteiro: ${fPalpiteiro.value}`, clear: () => { fPalpiteiro.value = ""; renderAll(); } });
+  if (fLiga.value) {
+    const lbl = CONFIG.COMP_LABEL[fLiga.value] || fLiga.value;
+    activeFilters.push({ label: `Competição: ${lbl}`, clear: () => { fLiga.value = ""; renderAll(); } });
+  }
+  if (fData.value) activeFilters.push({ label: `Data: ${formatDateBR(fData.value)}`, clear: () => { fData.value = ""; renderAll(); } });
+  if (fBusca.value) activeFilters.push({ label: `Busca: ${fBusca.value}`, clear: () => { fBusca.value = ""; renderAll(); } });
+
+  const filterEl = document.querySelector(".filters-active") || document.createElement("div");
+  if (!document.querySelector(".filters-active")) {
+    filterEl.className = "filters-active";
+    fPalpiteiro.parentElement.parentElement.insertBefore(filterEl, fPalpiteiro.parentElement.nextSibling);
+  }
+
+  if (activeFilters.length > 0) {
+    filterEl.style.display = "flex";
+    filterEl.innerHTML = activeFilters.map(f => `
+      <div class="filter-chip">
+        ${escapeHtml(f.label)}
+        <span class="remove" onclick="
+          ${f.clear.toString()}
+          arguments[0].target.closest('.filter-chip').parentElement.style.display = 'none';
+        " style="cursor:pointer">✕</span>
+      </div>
+    `).join("") + `<div class="results-count">${filtered.length} jogo${filtered.length !== 1 ? 's' : ''} encontrado${filtered.length !== 1 ? 's' : ''}</div>`;
+  } else {
+    filterEl.style.display = "none";
+  }
 
   renderKpis(kpis);
   renderRanking(rank);

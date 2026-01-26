@@ -119,7 +119,7 @@ async function fetchRows() {
   const url = `${CONFIG.SCRIPT_URL}?action=list&secret=${encodeURIComponent(CONFIG.SECRET)}`;
   const data = await jsonp(url);
   if (!data?.ok) throw new Error(data?.error || "list_error");
-  console.log("Dados brutos:", data.rows);
+  // console.log("Dados brutos:", data.rows);
   return Array.isArray(data.rows) ? data.rows : [];
 }
 

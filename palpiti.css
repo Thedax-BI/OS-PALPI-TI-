@@ -396,7 +396,7 @@ input:hover {
 		;
 }
 .rowMain > .card {
-  align-self: start;
+  /* align-self: start; */
   min-width: 0;
 }
 @media (max-width: 900px) {

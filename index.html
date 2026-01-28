@@ -171,7 +171,7 @@
         width:84px;
         text-align:center;
     }
-    .teamSearch{
+    .teamSelect{
         flex:1;
         background:#0c162b;
         color:var(--text);
@@ -180,7 +180,7 @@
         padding:10px 12px;
         outline:none;
     }
-    .teamSearch:focus{
+    .teamSelect:focus{
         border-color: rgba(75,139,255,.7);
         box-shadow: 0 0 0 3px rgba(75,139,255,.15);
     }
@@ -268,7 +268,7 @@
             </div>
           </div>
 
-          <!-- TIME + GOLS (com busca) -->
+          <!-- TIME + GOLS (com select) -->
 <div class="row-match">
   <div class="field">
     <label>Mandante</label>
@@ -284,16 +284,15 @@
         placeholder="0"
         required
       />
-      <input
-        class="teamSearch"
+      <select
+        class="teamSelect"
         id="mandante"
         name="mandante"
-        list="listMandante"
-        placeholder="Buscar time…"
         required
         disabled
-      />
-      <datalist id="listMandante"></datalist>
+      >
+        <option value="" selected disabled>Selecione o time…</option>
+      </select>
     </div>
   </div>
 
@@ -313,16 +312,15 @@
                     placeholder="0"
                     required
                 />
-                <input
-                    class="teamSearch"
+                <select
+                    class="teamSelect"
                     id="visitante"
                     name="visitante"
-                    list="listVisitante"
-                    placeholder="Buscar time…"
                     required
                     disabled
-                />
-                <datalist id="listVisitante"></datalist>
+                >
+                  <option value="" selected disabled>Selecione o time…</option>
+                </select>
                 </div>
             </div>
             </div>
@@ -355,10 +353,10 @@
         "Mirassol","Portuguesa","Botafogo-SP","São Bernardo", 
         "Primavera", "Capivariano", "Velo Clube", "Noroeste"
       ],
-      brasileirao: [
-        "Atlético-MG","Bahia","Botafogo","Bragantino","Corinthians","Cruzeiro",
-        "Cuiabá","Flamengo","Fluminense","Fortaleza","Grêmio","Internacional",
-        "Juventude","Palmeiras","São Paulo","Santos","Vasco"
+        brasileirao: [
+        "Atlético-MG","Athletico-PR","Bahia","Botafogo","Bragantino", "Chapecoense","Coritiba","Corinthians","Cruzeiro",
+        "Flamengo","Fluminense","Remo","Grêmio","Internacional",
+        "Mirassol","Palmeiras","São Paulo","Santos","Vasco", 
       ],
       libertadores: [
         "Boca Juniors","River Plate","Peñarol","Nacional","Colo-Colo",
@@ -380,14 +378,10 @@
     const nome = el("nome");
     const dataJogo = el("dataJogo");
     const competicao = el("competicao");
-    const mandante = el("mandante");     // agora é input
-    const visitante = el("visitante");   // agora é input
-    const listMandante = el("listMandante");
-    const listVisitante = el("listVisitante");
+    const mandante = el("mandante");     // agora é select
+    const visitante = el("visitante");   // agora é select
     const golsMandante = el("golsMandante");
     const golsVisitante = el("golsVisitante");
-    const lblGolsMandante = el("lblGolsMandante");
-    const lblGolsVisitante = el("lblGolsVisitante");
 
     const btnEnviar = el("btnEnviar");
     const btnRefresh = el("btnRefresh");
@@ -398,34 +392,38 @@
     btnRefresh.addEventListener("click", () => {
       window.location.reload();
     });
-    function resetTeamInput(teamInput, dataListEl, placeholderText) {
-        teamInput.value = "";
-        teamInput.placeholder = placeholderText;
-        dataListEl.innerHTML = "";
+    function resetTeamSelect(teamSelect) {
+        // Limpa todas as opções exceto a primeira (placeholder)
+        while (teamSelect.options.length > 1) {
+            teamSelect.remove(1);
+        }
+        teamSelect.value = "";
     }
 
     function preencherTimes() {
         const comp = competicao.value;
         const times = TIMES_POR_COMPETICAO[comp] || [];
 
-        resetTeamInput(mandante, listMandante, "Buscar time…");
-        resetTeamInput(visitante, listVisitante, "Buscar time…");
+        resetTeamSelect(mandante);
+        resetTeamSelect(visitante);
 
         for (const t of times) {
             const o1 = document.createElement("option");
             o1.value = t;
-            listMandante.appendChild(o1);
+            o1.textContent = t;
+            mandante.appendChild(o1);
 
             const o2 = document.createElement("option");
             o2.value = t;
-            listVisitante.appendChild(o2);
+            o2.textContent = t;
+            visitante.appendChild(o2);
         }
 
         mandante.disabled = times.length === 0;
         visitante.disabled = times.length === 0;
 
         hint.textContent = times.length
-            ? `Times carregados: ${times.length}. Digite para buscar e selecione.`
+            ? `Times carregados: ${times.length}. Selecione os times para o jogo.`
             : "Sem times cadastrados para essa competição.";
 
         validarFormulario();
@@ -437,17 +435,7 @@
     }
 
     function labelsGols() {
-      const tipo = form.tipoLancamento?.value || "";
-      if (tipo === "resultado") {
-        lblGolsMandante.textContent = "Gols (resultado) — mandante";
-        lblGolsVisitante.textContent = "Gols (resultado) — visitante";
-      } else if (tipo === "palpite") {
-        lblGolsMandante.textContent = "Gols (palpite) — mandante";
-        lblGolsVisitante.textContent = "Gols (palpite) — visitante";
-      } else {
-        lblGolsMandante.textContent = "Gols do mandante";
-        lblGolsVisitante.textContent = "Gols do visitante";
-      }
+      // Função preparada para futuras melhorias
     }
 
     function intOrNull(v) {
@@ -583,7 +571,7 @@
             golsVisitante: String(payload.golsVisitante),
             tipoLancamento: payload.tipoLancamento,
             // createdAt não precisa (o GAS já registra), mas pode mandar:
-            createdAt: payload.createdAtBR,
+            createdAt: payload.createdAt,
         });
 
         try {
@@ -604,8 +592,8 @@
 
 
 
-    resetSelect(mandante, "Selecione a competição…");
-    resetSelect(visitante, "Selecione a competição…");
+    resetTeamSelect(mandante);
+    resetTeamSelect(visitante);
     validarFormulario();
   </script>
 </body>

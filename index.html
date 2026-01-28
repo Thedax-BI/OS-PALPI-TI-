@@ -171,7 +171,7 @@
         width:84px;
         text-align:center;
     }
-    .teamSearch{
+    .teamSelect{
         flex:1;
         background:#0c162b;
         color:var(--text);
@@ -180,7 +180,7 @@
         padding:10px 12px;
         outline:none;
     }
-    .teamSearch:focus{
+    .teamSelect:focus{
         border-color: rgba(75,139,255,.7);
         box-shadow: 0 0 0 3px rgba(75,139,255,.15);
     }
@@ -228,7 +228,9 @@
               <option value="" selected disabled>Selecione…</option>
               <option>Resultado</option>
               <option>Igor Florense</option>
-              <option>Jésse Diniz</option>
+              <option>Enzo Rodrigues</option>
+              <option>Lucas Silva</option>
+              <option>Jessé Diniz</option>
               <option>Sérgio Da Silva</option>
               <option>Diego Gavioli</option>
               <option>Matheus Luz</option>
@@ -266,7 +268,7 @@
             </div>
           </div>
 
-          <!-- TIME + GOLS -->
+          <!-- TIME + GOLS (com select) -->
 <div class="row-match">
   <div class="field">
     <label>Mandante</label>
@@ -283,7 +285,7 @@
         required
       />
       <select
-        class="teamSearch"
+        class="teamSelect"
         id="mandante"
         name="mandante"
         required
@@ -296,32 +298,32 @@
 
   <div class="x">X</div>
 
-  <div class="field">
-    <label>Visitante</label>
-    <div class="teamLine">
-      <input
-        class="golsMini"
-        id="golsVisitante"
-        name="golsVisitante"
-        type="number"
-        min="0"
-        max="30"
-        step="1"
-        placeholder="0"
-        required
-      />
-      <select
-        class="teamSearch"
-        id="visitante"
-        name="visitante"
-        required
-        disabled
-      >
-        <option value="" selected disabled>Selecione o time…</option>
-      </select>
-    </div>
-  </div>
-</div>
+            <div class="field">
+                <label>Visitante</label>
+                <div class="teamLine">
+                <input
+                    class="golsMini"
+                    id="golsVisitante"
+                    name="golsVisitante"
+                    type="number"
+                    min="0"
+                    max="30"
+                    step="1"
+                    placeholder="0"
+                    required
+                />
+                <select
+                    class="teamSelect"
+                    id="visitante"
+                    name="visitante"
+                    required
+                    disabled
+                >
+                  <option value="" selected disabled>Selecione o time…</option>
+                </select>
+                </div>
+            </div>
+            </div>
 
 
         </div>
@@ -338,7 +340,7 @@
         <pre id="preview"></pre>
       </form>
     </div>
-    <a href="dashboard.html" class="dashboardBtn">Dashboard</a>
+    <a href="dashboard.html" target="_blank" class="dashboardBtn">Dashboard</a>
   </div>
   <iframe name="gas_iframe" style="display:none"></iframe>
 
@@ -351,7 +353,7 @@
         "Mirassol","Portuguesa","Botafogo-SP","São Bernardo", 
         "Primavera", "Capivariano", "Velo Clube", "Noroeste"
       ],
-      brasileirao: [
+        brasileirao: [
         "Atlético-MG","Athletico-PR","Bahia","Botafogo","Bragantino", "Chapecoense","Coritiba","Corinthians","Cruzeiro",
         "Flamengo","Fluminense","Remo","Grêmio","Internacional",
         "Mirassol","Palmeiras","São Paulo","Santos","Vasco", 
@@ -380,8 +382,6 @@
     const visitante = el("visitante");   // agora é select
     const golsMandante = el("golsMandante");
     const golsVisitante = el("golsVisitante");
-    const lblGolsMandante = el("lblGolsMandante");
-    const lblGolsVisitante = el("lblGolsVisitante");
 
     const btnEnviar = el("btnEnviar");
     const btnRefresh = el("btnRefresh");
@@ -392,15 +392,21 @@
     btnRefresh.addEventListener("click", () => {
       window.location.reload();
     });
+    function resetTeamSelect(teamSelect) {
+        // Limpa todas as opções exceto a primeira (placeholder)
+        while (teamSelect.options.length > 1) {
+            teamSelect.remove(1);
+        }
+        teamSelect.value = "";
+    }
+
     function preencherTimes() {
         const comp = competicao.value;
         const times = TIMES_POR_COMPETICAO[comp] || [];
 
-        // Limpar selects
-        mandante.innerHTML = '<option value="" selected disabled>Selecione o time…</option>';
-        visitante.innerHTML = '<option value="" selected disabled>Selecione o time…</option>';
+        resetTeamSelect(mandante);
+        resetTeamSelect(visitante);
 
-        // Adicionar times aos selects
         for (const t of times) {
             const o1 = document.createElement("option");
             o1.value = t;
@@ -417,7 +423,7 @@
         visitante.disabled = times.length === 0;
 
         hint.textContent = times.length
-            ? `Times carregados: ${times.length}. Selecione nos dropdowns.`
+            ? `Times carregados: ${times.length}. Selecione os times para o jogo.`
             : "Sem times cadastrados para essa competição.";
 
         validarFormulario();
@@ -429,17 +435,7 @@
     }
 
     function labelsGols() {
-      const tipo = form.tipoLancamento?.value || "";
-      if (tipo === "resultado") {
-        lblGolsMandante.textContent = "Gols (resultado) — mandante";
-        lblGolsVisitante.textContent = "Gols (resultado) — visitante";
-      } else if (tipo === "palpite") {
-        lblGolsMandante.textContent = "Gols (palpite) — mandante";
-        lblGolsVisitante.textContent = "Gols (palpite) — visitante";
-      } else {
-        lblGolsMandante.textContent = "Gols do mandante";
-        lblGolsVisitante.textContent = "Gols do visitante";
-      }
+      // Função preparada para futuras melhorias
     }
 
     function intOrNull(v) {
@@ -532,7 +528,7 @@
 
         // uso:
         // const HorarioBrasil = nowSaoPauloIso();
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwcDeFMSgDzcqOe3AGpYHaHxS2-76Qd1V4GiJKRzs1YLSR_d5UONKuds7Zr144epdKkEw/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwaCT1JaglH0MAVtbr9VErA6PW8gQ-1_nQx6re9gzNnDSXSO9GLk8qc1O_w9mb1_B11WQ/exec";
         const SECRET = "ODam2CcITWgs6UH1eWgqIczul0JktfMjOif5kiOFi5t5rD457BXepCtdQTOda5F8";
 
         const createdAtBR = new Intl.DateTimeFormat("pt-BR", {
@@ -575,7 +571,7 @@
             golsVisitante: String(payload.golsVisitante),
             tipoLancamento: payload.tipoLancamento,
             // createdAt não precisa (o GAS já registra), mas pode mandar:
-            createdAt: payload.createdAtBR,
+            createdAt: payload.createdAt,
         });
 
         try {
@@ -596,7 +592,12 @@
 
 
 
+    resetTeamSelect(mandante);
+    resetTeamSelect(visitante);
     validarFormulario();
   </script>
 </body>
 </html>
+
+
+

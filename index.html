@@ -228,9 +228,7 @@
               <option value="" selected disabled>Selecione…</option>
               <option>Resultado</option>
               <option>Igor Florense</option>
-              <option>Enzo Rodrigues</option>
-              <option>Lucas Silva</option>
-              <option>Jessé Diniz</option>
+              <option>Jésse Diniz</option>
               <option>Sérgio Da Silva</option>
               <option>Diego Gavioli</option>
               <option>Matheus Luz</option>
@@ -268,7 +266,7 @@
             </div>
           </div>
 
-          <!-- TIME + GOLS (com busca) -->
+          <!-- TIME + GOLS -->
 <div class="row-match">
   <div class="field">
     <label>Mandante</label>
@@ -284,48 +282,46 @@
         placeholder="0"
         required
       />
-      <input
+      <select
         class="teamSearch"
         id="mandante"
         name="mandante"
-        list="listMandante"
-        placeholder="Buscar time…"
         required
         disabled
-      />
-      <datalist id="listMandante"></datalist>
+      >
+        <option value="" selected disabled>Selecione o time…</option>
+      </select>
     </div>
   </div>
 
   <div class="x">X</div>
 
-            <div class="field">
-                <label>Visitante</label>
-                <div class="teamLine">
-                <input
-                    class="golsMini"
-                    id="golsVisitante"
-                    name="golsVisitante"
-                    type="number"
-                    min="0"
-                    max="30"
-                    step="1"
-                    placeholder="0"
-                    required
-                />
-                <input
-                    class="teamSearch"
-                    id="visitante"
-                    name="visitante"
-                    list="listVisitante"
-                    placeholder="Buscar time…"
-                    required
-                    disabled
-                />
-                <datalist id="listVisitante"></datalist>
-                </div>
-            </div>
-            </div>
+  <div class="field">
+    <label>Visitante</label>
+    <div class="teamLine">
+      <input
+        class="golsMini"
+        id="golsVisitante"
+        name="golsVisitante"
+        type="number"
+        min="0"
+        max="30"
+        step="1"
+        placeholder="0"
+        required
+      />
+      <select
+        class="teamSearch"
+        id="visitante"
+        name="visitante"
+        required
+        disabled
+      >
+        <option value="" selected disabled>Selecione o time…</option>
+      </select>
+    </div>
+  </div>
+</div>
 
 
         </div>
@@ -342,7 +338,7 @@
         <pre id="preview"></pre>
       </form>
     </div>
-    <a href="dashboard.html" target="_blank" class="dashboardBtn">Dashboard</a>
+    <a href="dashboard.html" class="dashboardBtn">Dashboard</a>
   </div>
   <iframe name="gas_iframe" style="display:none"></iframe>
 
@@ -356,9 +352,9 @@
         "Primavera", "Capivariano", "Velo Clube", "Noroeste"
       ],
       brasileirao: [
-        "Atlético-MG","Bahia","Botafogo","Bragantino","Corinthians","Cruzeiro",
-        "Cuiabá","Flamengo","Fluminense","Fortaleza","Grêmio","Internacional",
-        "Juventude","Palmeiras","São Paulo","Santos","Vasco"
+        "Atlético-MG","Athletico-PR","Bahia","Botafogo","Bragantino", "Chapecoense","Coritiba","Corinthians","Cruzeiro",
+        "Flamengo","Fluminense","Remo","Grêmio","Internacional",
+        "Mirassol","Palmeiras","São Paulo","Santos","Vasco", 
       ],
       libertadores: [
         "Boca Juniors","River Plate","Peñarol","Nacional","Colo-Colo",
@@ -380,10 +376,8 @@
     const nome = el("nome");
     const dataJogo = el("dataJogo");
     const competicao = el("competicao");
-    const mandante = el("mandante");     // agora é input
-    const visitante = el("visitante");   // agora é input
-    const listMandante = el("listMandante");
-    const listVisitante = el("listVisitante");
+    const mandante = el("mandante");     // agora é select
+    const visitante = el("visitante");   // agora é select
     const golsMandante = el("golsMandante");
     const golsVisitante = el("golsVisitante");
     const lblGolsMandante = el("lblGolsMandante");
@@ -398,34 +392,32 @@
     btnRefresh.addEventListener("click", () => {
       window.location.reload();
     });
-    function resetTeamInput(teamInput, dataListEl, placeholderText) {
-        teamInput.value = "";
-        teamInput.placeholder = placeholderText;
-        dataListEl.innerHTML = "";
-    }
-
     function preencherTimes() {
         const comp = competicao.value;
         const times = TIMES_POR_COMPETICAO[comp] || [];
 
-        resetTeamInput(mandante, listMandante, "Buscar time…");
-        resetTeamInput(visitante, listVisitante, "Buscar time…");
+        // Limpar selects
+        mandante.innerHTML = '<option value="" selected disabled>Selecione o time…</option>';
+        visitante.innerHTML = '<option value="" selected disabled>Selecione o time…</option>';
 
+        // Adicionar times aos selects
         for (const t of times) {
             const o1 = document.createElement("option");
             o1.value = t;
-            listMandante.appendChild(o1);
+            o1.textContent = t;
+            mandante.appendChild(o1);
 
             const o2 = document.createElement("option");
             o2.value = t;
-            listVisitante.appendChild(o2);
+            o2.textContent = t;
+            visitante.appendChild(o2);
         }
 
         mandante.disabled = times.length === 0;
         visitante.disabled = times.length === 0;
 
         hint.textContent = times.length
-            ? `Times carregados: ${times.length}. Digite para buscar e selecione.`
+            ? `Times carregados: ${times.length}. Selecione nos dropdowns.`
             : "Sem times cadastrados para essa competição.";
 
         validarFormulario();
@@ -540,7 +532,7 @@
 
         // uso:
         // const HorarioBrasil = nowSaoPauloIso();
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwaCT1JaglH0MAVtbr9VErA6PW8gQ-1_nQx6re9gzNnDSXSO9GLk8qc1O_w9mb1_B11WQ/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwcDeFMSgDzcqOe3AGpYHaHxS2-76Qd1V4GiJKRzs1YLSR_d5UONKuds7Zr144epdKkEw/exec";
         const SECRET = "ODam2CcITWgs6UH1eWgqIczul0JktfMjOif5kiOFi5t5rD457BXepCtdQTOda5F8";
 
         const createdAtBR = new Intl.DateTimeFormat("pt-BR", {
@@ -604,12 +596,7 @@
 
 
 
-    resetSelect(mandante, "Selecione a competição…");
-    resetSelect(visitante, "Selecione a competição…");
     validarFormulario();
   </script>
 </body>
 </html>
-
-
-

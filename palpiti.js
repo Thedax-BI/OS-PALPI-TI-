@@ -14,6 +14,7 @@ const CONFIG = {
     libertadores: "Libertadores",
     copa_do_brasil: "Copa do Brasil",
     sulamericana: "Sul-Americana",
+    supercoparei: "Super Copa Rei",
   },
 
   

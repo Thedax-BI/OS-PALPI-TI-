@@ -251,6 +251,7 @@
               <option value="libertadores">Libertadores</option>
               <option value="copa_do_brasil">Copa do Brasil</option>
               <option value="sulamericana">Sul-Americana</option>
+              <option value="supercoparei">Super Copa Rei</option>
             </select>
           </div>
 
@@ -331,7 +332,7 @@
         <div class="actions">
           <div class="hint" id="hint">Escolha a competição para carregar os times.</div>
           <div>
-              <button onClick="window.location.reload()" id="btnRefresh">Limpar</button>
+              <button onClick="window.location.reload()" id="btnRefresh" style="display: none;">Limpar</button>
               <button id="btnEnviar" type="submit">Enviar</button>
             </div>
         </div>
@@ -353,9 +354,9 @@
         "Mirassol","Portuguesa","Botafogo-SP","São Bernardo", 
         "Primavera", "Capivariano", "Velo Clube", "Noroeste"
       ],
-        brasileirao: [
-        "Atlético-MG","Athletico-PR","Bahia","Botafogo","Bragantino", "Chapecoense","Coritiba","Corinthians","Cruzeiro",
-        "Flamengo","Fluminense","Remo","Grêmio","Internacional",
+      brasileirao: [
+        "Atlético-MG","Athletico-PR","Bahia","Botafogo","Bragantino", "Chapecoense","Coritiba"
+        ,"Corinthians","Cruzeiro","Flamengo","Fluminense","Remo","Grêmio","Internacional",
         "Mirassol","Palmeiras","São Paulo","Santos","Vasco", 
       ],
       libertadores: [
@@ -369,6 +370,9 @@
       sulamericana: [
         "Athletico-PR","América-MG","Defensa y Justicia","Independiente",
         "LDU","Racing","San Lorenzo","Universidad Católica","Cerro Porteño"
+      ],
+      supercoparei: [
+        "Corinthians","Flamengo"
       ],
     };
 
@@ -598,6 +602,8 @@
   </script>
 </body>
 </html>
+
+
 
 
 

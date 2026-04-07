@@ -385,15 +385,12 @@ input:hover {
 .rowMain {
   display: grid;
   gap: 12px;
-  grid-template-columns: auto 500px;
-  /* grid-template-rows: 250px 750px; */
-  margin-bottom: 20px;
+  grid-template-columns: auto 450px;
   grid-template-rows: 250px 550px;
-
-	grid-template:
-		"ranking pendentes"  
+  grid-template-areas:
+    "ranking pendentes"
     "palpites pendentes";
-		;
+  margin-bottom: 20px;
 }
 .rowMain > .card {
   /* align-self: start; */
@@ -685,13 +682,88 @@ input:hover {
 }
 
 
-.palpites_card{
+.palpites_card {
   grid-area: palpites;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.palpites_card .tblWrap {
+  flex: 1;
+  min-height: 0;
+  max-height: none;
+  overflow-y: auto;
 }
 
 .pendentes {
   grid-area: pendentes;
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.pendentes .cardMatch {
+  padding: 8px 10px;
+}
+
+.pendentes .matchHead {
+  flex-wrap: nowrap;
+  gap: 6px;
+}
+
+.pendentes .matchHead .muted {
+  flex: 0 0 auto;
+  font-size: 11px;
+}
+
+.pendentes .matchCounters {
+  font-size: 13px;
+  min-width: 50px;
+  padding: 2px 6px;
+  flex: 0 0 auto;
+}
+
+.pendentes .badge {
+  font-size: 11px;
+  padding: 4px 7px;
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.pendentes .teams {
+  gap: 6px;
+  flex-wrap: nowrap;
+}
+
+.pendentes .crestBox {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+}
+
+.pendentes .crest {
+  width: 28px;
+  height: 28px;
+  flex: 0 0 28px;
+}
+
+.pendentes .times_style {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+  margin-left: 4px !important;
+  width: auto !important;
+}
+
+.pendentes #cards {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-height: 0;
 }
 
 .ranking {

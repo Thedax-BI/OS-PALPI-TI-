@@ -360,11 +360,20 @@ function renderPendentes(games) {
   
   for (const [comp, games] of byComp) {
     const compLbl = CONFIG.COMP_LABEL[comp] || comp;
-    const cardsHtml = games.map(g => `
-      <div class="cardMatch">
+    const cardsHtml = games.map(g => {
+      const picks = (g.palpites || []).slice().sort((a, b) => a.nome.localeCompare(b.nome));
+      const picksRows = picks.map(p => `
+        <tr>
+          <td style="width:50%" class="muted small">${escapeHtml(p.nome)}</td>
+          <td style="width:50%"><span class="muted small">${escapeHtml(String(p.golsMandante))} × ${escapeHtml(String(p.golsVisitante))}</span></td>
+        </tr>
+      `).join("");
+
+      return `
+      <div class="cardMatch gameBlock collapsed" style="cursor:pointer" onclick="this.classList.toggle('collapsed')">
         <div class="matchHead">
           <div class="muted small">${escapeHtml(formatDateBR(g.dataJogo))}</div>
-          <div class="matchCounters">${g.palpites.length} 📝</div>
+          <div class="matchCounters"><span class="caret" style="font-size:14px">▾</span> ${g.palpites.length} 📝</div>
           ${badge("pend", "Pendente")}
         </div>
         <div class="teams">
@@ -378,8 +387,19 @@ function renderPendentes(games) {
             <b class="times_style">${escapeHtml(g.visitante)}</b>
           </div>
         </div>
+        <div class="gameBody" style="margin-top:8px">
+          <table class="subtbl">
+            <thead>
+              <tr>
+                <th class="muted small" style="text-align:left">Palpiteiro</th>
+                <th class="muted small" style="text-align:left">Palpite</th>
+              </tr>
+            </thead>
+            <tbody>${picksRows}</tbody>
+          </table>
+        </div>
       </div>
-    `).join("");
+    `}).join("");
 
     html += `
       <div class="comp-group">

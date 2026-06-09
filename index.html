@@ -3,306 +3,124 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="dark light" />
   <title>Palpites - Formulário</title>
-  <style>
-    :root{
-      --bg:#0b1220;
-      --card:#111a2e;
-      --muted:#9fb0d0;
-      --text:#eaf0ff;
-      --line:#213154;
-      --accent:#4b8bff;
-      --danger:#ff5c73;
-      --ok:#35d07f;
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background: radial-gradient(1200px 800px at 20% 10%, #14234a 0%, var(--bg) 55%);
-      color: var(--text);
-      min-height:100vh;
-      display:flex;
-      align-items:flex-start;
-      justify-content:center;
-      padding:32px 16px;
-    }
-    .wrap{width:100%; max-width:860px;}
-    header{
-      display:flex; align-items:flex-end; justify-content:space-between;
-      gap:16px; margin-bottom:16px;
-    }
-    h1{font-size:22px; margin:0; letter-spacing:.2px;}
-    .subtitle{margin:6px 0 0; color:var(--muted); font-size:13px;}
-    .card{
-      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
-      border:1px solid var(--line);
-      border-radius:18px;
-      padding:18px;
-      box-shadow: 0 10px 30px rgba(0,0,0,.25);
-    }
-    form{display:grid; gap:14px;}
-    .grid{
-      display:grid;
-      grid-template-columns: repeat(12, 1fr);
-      gap:12px;
-    }
-    .field{
-      grid-column: span 12;
-      display:flex; flex-direction:column; gap:6px;
-    }
-    label{
-      font-size:12px;
-      color: var(--muted);
-      letter-spacing:.2px;
-    }
-    select, input[type="date"], input[type="number"]{
-      background:#0c162b;
-      color:var(--text);
-      border:1px solid var(--line);
-      border-radius:12px;
-      padding:10px 12px;
-      outline:none;
-    }
-    select:focus, input:focus{
-      border-color: rgba(75,139,255,.7);
-      box-shadow: 0 0 0 3px rgba(75,139,255,.15);
-    }
-    .row-match{
-      grid-column: span 12;
-      display:grid;
-      grid-template-columns: 1fr auto 1fr;
-      align-items:end;
-      gap:12px;
-      padding-top:4px;
-    }
-    .x{
-      padding:0 6px 10px;
-      color: var(--muted);
-      font-weight:700;
-      letter-spacing:1px;
-      text-align:center;
-      min-width:24px;
-    }
-    .row-gols{
-      grid-column: span 12;
-      display:grid;
-      grid-template-columns: 1fr auto 1fr;
-      align-items:end;
-      gap:12px;
-      margin-top:-4px;
-      padding-bottom:4px;
-    }
-    .golsWrap{
-      display:flex;
-      flex-direction:column;
-      gap:6px;
-    }
-    .golsLabel{
-      font-size:12px;
-      color: var(--muted);
-    }
-    .golsInput{
-      width:100%;
-    }
-    .radios{
-      display:flex; gap:12px; flex-wrap:wrap;
-      background:#0c162b;
-      border:1px solid var(--line);
-      border-radius:12px;
-      padding:10px 12px;
-    }
-    .radio{
-      display:flex; align-items:center; gap:8px;
-      font-size:13px; color: var(--text);
-    }
-    .radio input{accent-color: var(--accent);}
-    .actions{
-      display:flex; gap:10px; flex-wrap:wrap;
-      align-items:center; justify-content:space-between;
-      margin-top:4px;
-    }
-    button{
-      cursor:pointer;
-      border:0;
-      border-radius:12px;
-      padding:10px 14px;
-      font-weight:700;
-      background: linear-gradient(135deg, var(--accent), #7aa8ff);
-      color:#061024;
-    }
-    button:disabled{
-      cursor:not-allowed;
-      opacity:.55;
-      filter:saturate(.6);
-    }
-    .hint{color:var(--muted); font-size:12px;}
-    .msg{
-      margin-top:12px;
-      padding:10px 12px;
-      border-radius:12px;
-      border:1px solid var(--line);
-      background:#0c162b;
-      font-size:13px;
-      display:none;
-    }
-    .msg.ok{border-color: rgba(53,208,127,.5)}
-    .msg.err{border-color: rgba(255,92,115,.55)}
-    pre{
-      margin:12px 0 0;
-      padding:12px;
-      border-radius:14px;
-      border:1px solid var(--line);
-      background:#0a1326;
-      overflow:auto;
-      font-size:12px;
-      color:#cfe0ff;
-      display:none;
-    }
-    @media (min-width: 720px){
-      .field.col6{grid-column: span 6;}
-    }
-    .teamLine{
-        display:flex;
-        gap:10px;
-        align-items:center;
-        }
-    .golsMini{
-        width:84px;
-        text-align:center;
-    }
-    .teamSelect{
-        flex:1;
-        background:#0c162b;
-        color:var(--text);
-        border:1px solid var(--line);
-        border-radius:12px;
-        padding:10px 12px;
-        outline:none;
-    }
-    .teamSelect:focus{
-        border-color: rgba(75,139,255,.7);
-        box-shadow: 0 0 0 3px rgba(75,139,255,.15);
-    }
-    .dashboardBtn{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      margin-top:24px;
-      padding:12px 20px;
-      background: linear-gradient(135deg, #35d07f, #2ab86d);
-      color:#061024;
-      text-decoration:none;
-      border-radius:12px;
-      font-weight:700;
-      font-size:14px;
-      letter-spacing:.3px;
-      transition:all .25s ease;
-      box-shadow: 0 4px 12px rgba(53,208,127,.3);
-    }
-    .dashboardBtn:hover{
-      transform:translateY(-2px);
-      box-shadow: 0 6px 16px rgba(53,208,127,.4);
-    }
-    .dashboardBtn:active{
-      transform:translateY(0);
-    }
-
-  </style>
+  <link rel="stylesheet" href="palpiti.css" />
+  <script src="theme.js" defer></script>
+  <script src="formulario.js" defer></script>
 </head>
-<body>
-  <div class="wrap">
-    <header>
+<body class="form-page">
+  <div class="wrap form-shell">
+    <header class="app-header">
       <div>
+        <p class="eyebrow">OS PALPI-TI</p>
         <h1>Palpites de Futebol</h1>
-        <p class="subtitle">Formulário interno (pré-integração). Depois a gente envia para o Google Sheets.</p>
+        <p class="subtitle">Lance um palpite manualmente ou escolha um jogo já cadastrado.</p>
       </div>
+
+      <nav class="top-actions" aria-label="Navegação">
+        <a class="btn ghost nav-btn" href="dashboard.html">Dashboard</a>
+        <a class="btn ghost nav-btn" href="admin.html">Admin</a>
+        <button class="btn ghost icon-btn theme-toggle" id="themeToggle" type="button">Tema</button>
+      </nav>
     </header>
 
-    <div class="card">
-      <form id="form">
-        <div class="grid">
-          <div class="field col6">
-            <label for="nome">Nome</label>
-            <select id="nome" name="nome" required>
-              <option value="" selected disabled>Selecione…</option>
-              <option>Resultado</option>
-              <option>Igor Florense</option>
-              <option>Enzo Rodrigues</option>
-              <option>Lucas Silva</option>
-              <option>Jessé Diniz</option>
-              <option>Sérgio Da Silva</option>
-              <option>Diego Gavioli</option>
-              <option>Matheus Luz</option>
-            </select>
+    <main class="form-layout">
+      <section class="card suggestionsPanel" aria-labelledby="suggestionsTitle">
+        <div class="sectionHeader">
+          <div>
+            <p class="eyebrow">Agenda</p>
+            <h2 id="suggestionsTitle">Jogos sugeridos</h2>
           </div>
+          <button class="btn ghost compact" id="btnReloadSuggestions" type="button">Atualizar</button>
+        </div>
 
-          <div class="field col6">
-            <label for="dataJogo">Data do jogo</label>
-            <input id="dataJogo" name="dataJogo" type="date" required />
+        <label class="sr-only" for="suggestionSearch">Buscar sugestão</label>
+        <input id="suggestionSearch" type="search" placeholder="Buscar por time ou competição" autocomplete="off" />
+
+        <div id="suggestionsStatus" class="state-text">Carregando sugestões...</div>
+        <div id="suggestionsList" class="suggestionsList"></div>
+      </section>
+
+      <section class="card form-card" aria-labelledby="formTitle">
+        <div class="sectionHeader">
+          <div>
+            <p class="eyebrow">Lançamento</p>
+            <h2 id="formTitle">Novo registro</h2>
           </div>
+        </div>
 
-          <div class="field col6">
-            <label for="competicao">Competição</label>
-            <select id="competicao" name="competicao" required>
-              <option value="" selected disabled>Selecione…</option>
-              <option value="paulistao">Paulistão</option>
-              <option value="brasileirao">Brasileirão</option>
-              <option value="libertadores">Libertadores</option>
-              <option value="copa_do_brasil">Copa do Brasil</option>
-              <option value="sulamericana">Sul-Americana</option>
-              <option value="supercoparei">Super Copa Rei</option>
-            </select>
-          </div>
-
-          <div class="field col6">
-            <label>Tipo de lançamento</label>
-            <div class="radios" role="radiogroup" aria-label="Tipo de lançamento">
-              <label class="radio">
-                <input type="radio" name="tipoLancamento" value="resultado" required />
-                Resultado
-              </label>
-              <label class="radio">
-                <input type="radio" name="tipoLancamento" value="palpite" required />
-                Palpite
-              </label>
+        <form id="form" novalidate>
+          <div class="grid">
+            <div class="field col6">
+              <label for="nome">Nome</label>
+              <select id="nome" name="nome" required>
+                <option value="" selected disabled>Selecione...</option>
+                <option>Resultado</option>
+                <option>Igor Florense</option>
+                <option>Enzo Rodrigues</option>
+                <option>Lucas Silva</option>
+                <option>Jessé Diniz</option>
+                <option>Sérgio Da Silva</option>
+                <option>Diego Gavioli</option>
+                <option>Matheus Luz</option>
+              </select>
             </div>
-          </div>
 
-          <!-- TIME + GOLS (com select) -->
-<div class="row-match">
-  <div class="field">
-    <label>Mandante</label>
-    <div class="teamLine">
-      <input
-        class="golsMini"
-        id="golsMandante"
-        name="golsMandante"
-        type="number"
-        min="0"
-        max="30"
-        step="1"
-        placeholder="0"
-        required
-      />
-      <select
-        class="teamSelect"
-        id="mandante"
-        name="mandante"
-        required
-        disabled
-      >
-        <option value="" selected disabled>Selecione o time…</option>
-      </select>
-    </div>
-  </div>
+            <div class="field col6">
+              <label for="dataJogo">Data do jogo</label>
+              <input id="dataJogo" name="dataJogo" type="date" required />
+            </div>
 
-  <div class="x">X</div>
+            <div class="field col6">
+              <label for="competicao">Competição</label>
+              <select id="competicao" name="competicao" required>
+                <option value="" selected disabled>Carregando...</option>
+              </select>
+            </div>
 
-            <div class="field">
-                <label>Visitante</label>
+            <div class="field col6">
+              <span class="labelText">Tipo de lançamento</span>
+              <div class="radios" role="radiogroup" aria-label="Tipo de lançamento">
+                <label class="radio">
+                  <input type="radio" name="tipoLancamento" value="resultado" required />
+                  Resultado
+                </label>
+                <label class="radio">
+                  <input type="radio" name="tipoLancamento" value="palpite" required />
+                  Palpite
+                </label>
+              </div>
+            </div>
+
+            <div class="row-match">
+              <div class="field">
+                <label for="mandante">Mandante</label>
                 <div class="teamLine">
-                <input
+                  <input
+                    class="golsMini"
+                    id="golsMandante"
+                    name="golsMandante"
+                    type="number"
+                    min="0"
+                    max="30"
+                    step="1"
+                    placeholder="0"
+                    inputmode="numeric"
+                    required
+                  />
+                  <select class="teamSelect" id="mandante" name="mandante" required disabled>
+                    <option value="" selected disabled>Selecione o time...</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="x">X</div>
+
+              <div class="field">
+                <label for="visitante">Visitante</label>
+                <div class="teamLine">
+                  <input
                     class="golsMini"
                     id="golsVisitante"
                     name="golsVisitante"
@@ -311,359 +129,32 @@
                     max="30"
                     step="1"
                     placeholder="0"
+                    inputmode="numeric"
                     required
-                />
-                <select
-                    class="teamSelect"
-                    id="visitante"
-                    name="visitante"
-                    required
-                    disabled
-                >
-                  <option value="" selected disabled>Selecione o time…</option>
-                </select>
+                  />
+                  <select class="teamSelect" id="visitante" name="visitante" required disabled>
+                    <option value="" selected disabled>Selecione o time...</option>
+                  </select>
                 </div>
+              </div>
             </div>
+          </div>
+
+          <div class="actions">
+            <div class="hint" id="hint">Carregando competições e times.</div>
+            <div class="form-actions">
+              <button class="btn ghost" id="btnRefresh" type="button">Limpar</button>
+              <button class="btn" id="btnEnviar" type="submit" disabled>Enviar</button>
             </div>
+          </div>
 
-
-        </div>
-
-        <div class="actions">
-          <div class="hint" id="hint">Escolha a competição para carregar os times.</div>
-          <div>
-              <button onClick="window.location.reload()" id="btnRefresh" style="display: none;">Limpar</button>
-              <button id="btnEnviar" type="submit">Enviar</button>
-            </div>
-        </div>
-        
-        <div id="msg" class="msg"></div>
-        <pre id="preview"></pre>
-      </form>
-    </div>
-    <a href="dashboard.html" target="_blank" class="dashboardBtn">Dashboard</a>
+          <div id="msg" class="msg" aria-live="polite"></div>
+          <pre id="preview"></pre>
+        </form>
+      </section>
+    </main>
   </div>
-  <iframe name="gas_iframe" style="display:none"></iframe>
 
-
-  <script>
-    const TIMES_POR_COMPETICAO = {
-      paulistao: [
-        "Corinthians","Palmeiras","São Paulo","Santos",
-        "Bragantino","Guarani","Ponte Preta","Novorizontino",
-        "Mirassol","Portuguesa","Botafogo-SP","São Bernardo", 
-        "Primavera", "Capivariano", "Velo Clube", "Noroeste"
-      ],
-      brasileirao: [
-        "Atlético-MG","Athletico-PR","Bahia","Botafogo","Bragantino", "Chapecoense","Coritiba"
-        ,"Corinthians","Cruzeiro","Flamengo","Fluminense","Remo","Grêmio","Internacional",
-        "Mirassol","Palmeiras","São Paulo","Santos","Vasco", "Vitória", 
-      ],
-      libertadores: [
-        "2 de Mayo",
-        "Alianza Lima","Always Ready","Argentinos Juniors",
-        "Bahia","Barcelona de Guayaquil","Boca Juniors","Bolívar","Botafogo",
-        "Carabobo","Cerro Porteño","Coquimbo Unido","Corinthians","Cruzeiro","Cusco",
-        "Deportes La Guaira","Deportes Tolima","Deportivo Independiente Medellín","Deportivo Táchira",
-        "Estudiantes de La Plata",
-        "Flamengo","Fluminense",
-        "Guaraní",
-        "Huachipato",
-        "Independiente del Valle","Independiente Rivadavia","Independiente Santa Fé",
-        "Junior Barranquilla","Juventud",
-        "Lanús","LDU","Libertad","Liverpool",
-        "Mirassol",
-        "Nacional","Nacional Potosí",
-        "O'Higgins",
-        "Palmeiras","Peñarol","Platense",
-        "Rosario Central",
-        "Sporting Cristal",
-        "The Strongest",
-        "Universidad Católica (CHI)","Universidad Católica (EQU)","Universidad Central de Venezuela","Universitario"
-      ],
-      copa_do_brasil: [
-        "Athletic-MG",
-        "Athletico-PR",
-        "Atlético-GO",
-        "Atlético-MG",
-        "Bahia",
-        "Barra-SC",
-        "Botafogo",
-        "Ceará",
-        "Chapecoense",
-        "Confiança-SE",
-        "Corinthians",
-        "Coritiba",
-        "CRB",
-        "Cruzeiro",
-        "Flamengo",
-        "Fluminense",
-        "Fortaleza",
-        "Goiás",
-        "Grêmio",
-        "Internacional",
-        "Jacuipense",
-        "Juventude",
-        "Mirassol",
-        "Operário-PR",
-        "Palmeiras",
-        "Paysandu",
-        "RB Bragantino",
-        "Remo",
-        "Santos",
-        "São Paulo",
-        "Vasco",
-        "Vitória"
-      ],
-      sulamericana: [
-        "Alianza Atlético","América de Cali","Atlético-MG","Audax Italiano",
-        "Barracas Central","Blooming","Boston River","Botafogo",
-        "Carabobo","Caracas","Cienciano",
-        "Deportivo Cuenca","Deportivo Riestra",
-        "Grêmio",
-        "Independiente Petrolero",
-        "Juventud",
-        "Macará","Millonarios","Montevideo City Torque",
-        "O'Higgins","Olimpia",
-        "Palestino","Puerto Cabello",
-        "Racing","Red Bull Bragantino","Recoleta","River Plate",
-        "San Lorenzo","Santos","São Paulo",
-        "Tigre",
-        "Vasco"
-      ],
-      supercoparei: [
-        "Corinthians","Flamengo"
-      ]
-    };
-
-    const el = (id) => document.getElementById(id);
-
-    const form = el("form");
-    const nome = el("nome");
-    const dataJogo = el("dataJogo");
-    const competicao = el("competicao");
-    const mandante = el("mandante");     // agora é select
-    const visitante = el("visitante");   // agora é select
-    const golsMandante = el("golsMandante");
-    const golsVisitante = el("golsVisitante");
-
-    const btnEnviar = el("btnEnviar");
-    const btnRefresh = el("btnRefresh");
-    const msg = el("msg");
-    const preview = el("preview");
-    const hint = el("hint");
-
-    btnRefresh.addEventListener("click", () => {
-      window.location.reload();
-    });
-    function resetTeamSelect(teamSelect) {
-        // Limpa todas as opções exceto a primeira (placeholder)
-        while (teamSelect.options.length > 1) {
-            teamSelect.remove(1);
-        }
-        teamSelect.value = "";
-    }
-
-    function preencherTimes() {
-        const comp = competicao.value;
-        const times = TIMES_POR_COMPETICAO[comp] || [];
-
-        resetTeamSelect(mandante);
-        resetTeamSelect(visitante);
-
-        for (const t of times) {
-            const o1 = document.createElement("option");
-            o1.value = t;
-            o1.textContent = t;
-            mandante.appendChild(o1);
-
-            const o2 = document.createElement("option");
-            o2.value = t;
-            o2.textContent = t;
-            visitante.appendChild(o2);
-        }
-
-        mandante.disabled = times.length === 0;
-        visitante.disabled = times.length === 0;
-
-        hint.textContent = times.length
-            ? `Times carregados: ${times.length}. Selecione os times para o jogo.`
-            : "Sem times cadastrados para essa competição.";
-
-        validarFormulario();
-        }
-
-    function bloquearTimeIgual() {
-    // aqui só valida (não tem como desabilitar opção no datalist)
-    validarFormulario();
-    }
-
-    function labelsGols() {
-      // Função preparada para futuras melhorias
-    }
-
-    function intOrNull(v) {
-      if (v === "" || v === null || v === undefined) return null;
-      const n = Number(v);
-      if (!Number.isFinite(n)) return null;
-      if (!Number.isInteger(n)) return null;
-      return n;
-    }
-
-    function validarFormulario() {
-      msg.style.display = "none";
-      msg.className = "msg";
-      preview.style.display = "none";
-
-      labelsGols();
-
-      const tipo = form.tipoLancamento?.value || "";
-      const gm = intOrNull(golsMandante.value);
-      const gv = intOrNull(golsVisitante.value);
-
-      const ok =
-        nome.value &&
-        dataJogo.value &&
-        competicao.value &&
-        mandante.value &&
-        visitante.value &&
-        mandante.value !== visitante.value &&
-        tipo &&
-        gm !== null &&
-        gv !== null &&
-        gm >= 0 && gv >= 0;
-
-      btnEnviar.disabled = !ok;
-
-      if (mandante.value && visitante.value && mandante.value === visitante.value) {
-        msg.textContent = "Mandante e visitante não podem ser o mesmo time.";
-        msg.classList.add("err");
-        msg.style.display = "block";
-      }
-
-      if ((gm !== null && gm < 0) || (gv !== null && gv < 0)) {
-        msg.textContent = "Gols não podem ser negativos.";
-        msg.classList.add("err");
-        msg.style.display = "block";
-      }
-    }
-
-    competicao.addEventListener("change", () => {
-      preencherTimes();
-      bloquearTimeIgual();
-    });
-    
-    mandante.addEventListener("input", () => {
-        bloquearTimeIgual();
-        validarFormulario();
-    });
-
-    visitante.addEventListener("input", () => {
-        bloquearTimeIgual();
-        validarFormulario();
-    });
-
-    form.addEventListener("change", validarFormulario);
-    form.addEventListener("input", validarFormulario);
-
-    dataJogo.addEventListener("focus", () => dataJogo.showPicker?.());
-    dataJogo.addEventListener("click", () => dataJogo.showPicker?.());
-
-
-    form.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        function nowSaoPauloIso() {
-            const parts = new Intl.DateTimeFormat("sv-SE", {
-                timeZone: "America/Sao_Paulo",
-                year: "numeric",
-                month: "2-digit",
-                day: "2-digit",
-                hour: "2-digit",
-                minute: "2-digit",
-                second: "2-digit",
-                hour12: false
-            }).formatToParts(new Date());
-
-            const get = (t) => parts.find(p => p.type === t)?.value;
-
-            // sv-SE dá formato YYYY-MM-DD e HH:mm:ss bem “amigável” pra montar
-            return `${get("year")}-${get("month")}-${get("day")}T${get("hour")}:${get("minute")}:${get("second")}-03:00`;
-        }
-
-        // uso:
-        // const HorarioBrasil = nowSaoPauloIso();
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwaCT1JaglH0MAVtbr9VErA6PW8gQ-1_nQx6re9gzNnDSXSO9GLk8qc1O_w9mb1_B11WQ/exec";
-        const SECRET = "ODam2CcITWgs6UH1eWgqIczul0JktfMjOif5kiOFi5t5rD457BXepCtdQTOda5F8";
-
-        const createdAtBR = new Intl.DateTimeFormat("pt-BR", {
-            timeZone: "America/Sao_Paulo",
-            dateStyle: "short",
-            timeStyle: "medium"
-            }).format(new Date());
-
-            // ex: "12/01/2026 12:05:33"
-
-        const payload = {
-            nome: nome.value,
-            dataJogo: dataJogo.value,
-            competicao: competicao.value,
-            mandante: mandante.value,
-            visitante: visitante.value,
-            golsMandante: Number(golsMandante.value),
-            golsVisitante: Number(golsVisitante.value),
-            tipoLancamento: form.tipoLancamento.value,
-            createdAt: createdAtBR,
-        };
-
-        // mostra somente o JSON (como você pediu)
-        msg.className = "msg ok";
-        msg.textContent = "Enviado ✅";
-        msg.style.display = "block";
-
-        preview.textContent = JSON.stringify(payload, null, 2);
-        preview.style.display = "block";
-        console.log(createdAtBR)
-        // envia para o Apps Script (sem esperar retorno)
-        const body = new URLSearchParams({
-            secret: SECRET,
-            nome: payload.nome,
-            dataJogo: payload.dataJogo,
-            competicao: payload.competicao,
-            mandante: payload.mandante,
-            golsMandante: String(payload.golsMandante),
-            visitante: payload.visitante,
-            golsVisitante: String(payload.golsVisitante),
-            tipoLancamento: payload.tipoLancamento,
-            // createdAt não precisa (o GAS já registra), mas pode mandar:
-            createdAt: payload.createdAt,
-        });
-
-        try {
-            await fetch(SCRIPT_URL, {
-            method: "POST",
-            mode: "no-cors",
-            headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
-            body,
-            });
-        } catch (err) {
-            // opcional: você pode ignorar totalmente erros também,
-            // mas deixei uma mensagem caso o browser falhe o envio.
-            msg.className = "msg err";
-            msg.textContent = "Falha ao enviar (verifique conexão/URL do script).";
-            msg.style.display = "block";
-        }
-    });
-
-
-
-    resetTeamSelect(mandante);
-    resetTeamSelect(visitante);
-    validarFormulario();
-  </script>
+  <iframe name="gas_iframe" hidden></iframe>
 </body>
 </html>
-
-
-
-
-

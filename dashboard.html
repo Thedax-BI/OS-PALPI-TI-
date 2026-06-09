@@ -9,14 +9,25 @@
 
 <link href="https://cdn.datatables.net/v/bs5/jq-3.7.0/dt-2.3.2/datatables.css" rel="stylesheet" integrity="sha384-DHfRT7IADXUtfJt9UlJ57gGivhA9NXjQVQtoacky9nsGHmeCRZQs1MljjVj1CuK+" crossorigin="anonymous">
 <link rel="stylesheet" href="palpiti.css" />
+<script src="theme.js" defer></script>
  
 
 </head>
-<body>
+<body class="dashboard-page">
 
 <div class="wrap">
-  <div class="h1">🏆 OS PALPI-TI ⚽
-  </div>
+  <header class="app-header dashboard-header">
+    <div>
+      <p class="eyebrow">Ranking e jogos</p>
+      <div class="h1">OS PALPI-TI</div>
+    </div>
+
+    <nav class="top-actions" aria-label="Navegação">
+      <a class="btn ghost nav-btn" href="index.html">Formulário</a>
+      <a class="btn ghost nav-btn" href="admin.html">Admin</a>
+      <button class="btn ghost icon-btn theme-toggle" id="themeToggle" type="button">Tema</button>
+    </nav>
+  </header>
 
   <!-- Linha 1: Filtros + Detalhes (rolagem) -->
 

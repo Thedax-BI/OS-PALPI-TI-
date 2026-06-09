@@ -210,11 +210,11 @@ function entryFilterParams() {
 }
 
 async function loadEntries() {
-  adminEls.entriesBody.innerHTML = `<tr><td colspan="8" class="muted">Carregando...</td></tr>`;
+  adminEls.entriesBody.innerHTML = `<tr><td colspan="9" class="muted">Carregando...</td></tr>`;
   const data = await adminJsonp("adminEntries", entryFilterParams());
 
   if (!data?.ok) {
-    adminEls.entriesBody.innerHTML = `<tr><td colspan="8" class="muted">Falha ao carregar lançamentos.</td></tr>`;
+    adminEls.entriesBody.innerHTML = `<tr><td colspan="9" class="muted">Falha ao carregar lançamentos.</td></tr>`;
     return;
   }
 
@@ -235,7 +235,7 @@ function renderCompetitionOptions() {
 
 function renderEntries() {
   if (!adminState.entries.length) {
-    adminEls.entriesBody.innerHTML = `<tr><td colspan="8" class="muted">Nenhum lançamento encontrado.</td></tr>`;
+    adminEls.entriesBody.innerHTML = `<tr><td colspan="9" class="muted">Nenhum lançamento encontrado.</td></tr>`;
     return;
   }
 
@@ -244,6 +244,7 @@ function renderEntries() {
     return `
       <tr>
         <td>${escapeHtml(formatDateBR(row.dataJogo))}</td>
+        <td>${escapeHtml(row.createdAt || "-")}</td>
         <td>${escapeHtml(competitionName(row.competicao))}</td>
         <td>${escapeHtml(row.mandante)} x ${escapeHtml(row.visitante)}</td>
         <td>${escapeHtml(row.tipoLancamento)}</td>

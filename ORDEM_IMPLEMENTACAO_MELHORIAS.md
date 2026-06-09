@@ -33,7 +33,7 @@ Se houver conflito entre arquivos, a ordem de prioridade e:
 ## Status Geral
 
 ```text
-Status atual: implementacao local concluida; aguardando deploy do Apps Script e envio/validacao em qa
+Status atual: implementacao enviada para qa; aguardando deploy do Apps Script e validacao em qa
 Branch unica de implementacao: codex/melhorias-palpites
 Branch permanente de QA: qa
 Branch de producao: main
@@ -43,10 +43,10 @@ Branch de producao: main
 
 | Ordem | Fase | SPEC | Status | Branch usada | Depende de |
 | --- | --- | --- | --- | --- | --- |
-| 1 | Dados e Apps Script | `SPEC_FASE_1_DADOS_APPS_SCRIPT.md` | Implementada localmente | `codex/melhorias-palpites` | PRD aprovado |
-| 2 | Formulario e sugestoes | `SPEC_FASE_2_FORMULARIO_SUGESTOES.md` | Implementada localmente | `codex/melhorias-palpites` | Fase 1 implementada |
-| 3 | Area administrativa | `SPEC_FASE_3_ADMIN.md` | Implementada localmente | `codex/melhorias-palpites` | Fase 1 implementada |
-| 4 | Tema e QA Pages | `SPEC_FASE_4_TEMA_QA_PAGES.md` | Implementada localmente | `codex/melhorias-palpites` | Fases 1, 2 e 3 implementadas |
+| 1 | Dados e Apps Script | `SPEC_FASE_1_DADOS_APPS_SCRIPT.md` | Enviada para QA | `codex/melhorias-palpites` | PRD aprovado |
+| 2 | Formulario e sugestoes | `SPEC_FASE_2_FORMULARIO_SUGESTOES.md` | Enviada para QA | `codex/melhorias-palpites` | Fase 1 implementada |
+| 3 | Area administrativa | `SPEC_FASE_3_ADMIN.md` | Enviada para QA | `codex/melhorias-palpites` | Fase 1 implementada |
+| 4 | Tema e QA Pages | `SPEC_FASE_4_TEMA_QA_PAGES.md` | Enviada para QA | `codex/melhorias-palpites` | Fases 1, 2 e 3 implementadas |
 
 ## Regras de Atualizacao
 
@@ -75,7 +75,7 @@ Ao encontrar bloqueio:
 
 ### Fase 1 - Dados e Apps Script
 
-Status: Implementada localmente
+Status: Enviada para QA
 
 Branch usada:
 
@@ -97,7 +97,7 @@ Checklist:
 - [x] Criar autenticacao administrativa.
 - [x] Criar endpoints administrativos.
 - [x] Validar compatibilidade do dashboard atual.
-- [ ] Enviar para `qa`.
+- [x] Enviar para `qa`.
 - [x] Registrar resultado dos testes.
 
 Atualizacao da fase:
@@ -107,14 +107,14 @@ Inicio: 2026-06-09
 Fim: 2026-06-09 (local)
 Branch: codex/melhorias-palpites
 Commit: feat(melhorias): implementa fluxo de palpites e admin
-Merge em qa: pendente
+Merge em qa: sim
 Testes: node --check em scripts front-end; sintaxe de Code.gs via Node stdin; dashboard local em desktop/mobile
 Pendencias: implantar apps-script/Code.gs no projeto Apps Script e configurar Script Property ADMIN_PASSWORD
 ```
 
 ### Fase 2 - Formulario e Sugestoes
 
-Status: Implementada localmente
+Status: Enviada para QA
 
 Branch usada:
 
@@ -134,7 +134,7 @@ Checklist:
 - [x] Ajustar validacoes.
 - [x] Ajustar estilos.
 - [x] Testar mobile e desktop.
-- [ ] Enviar para `qa`.
+- [x] Enviar para `qa`.
 - [x] Registrar resultado dos testes.
 
 Atualizacao da fase:
@@ -144,14 +144,14 @@ Inicio: 2026-06-09
 Fim: 2026-06-09 (local)
 Branch: codex/melhorias-palpites
 Commit: feat(melhorias): implementa fluxo de palpites e admin
-Merge em qa: pendente
+Merge em qa: sim
 Testes: formulario local em desktop/mobile; fallback de competicoes/times; selecao de competicao carrega times
 Pendencias: publicar Apps Script novo para habilitar sugestoes reais vindas do endpoint gameSuggestions
 ```
 
 ### Fase 3 - Area Administrativa
 
-Status: Implementada localmente
+Status: Enviada para QA
 
 Branch usada:
 
@@ -172,7 +172,7 @@ Checklist:
 - [x] Adicionar link para admin.
 - [ ] Testar senha invalida e token expirado.
 - [ ] Testar exclusao refletindo no dashboard.
-- [ ] Enviar para `qa`.
+- [x] Enviar para `qa`.
 - [x] Registrar resultado dos testes.
 
 Atualizacao da fase:
@@ -182,14 +182,14 @@ Inicio: 2026-06-09
 Fim: 2026-06-09 (local)
 Branch: codex/melhorias-palpites
 Commit: feat(melhorias): implementa fluxo de palpites e admin
-Merge em qa: pendente
+Merge em qa: sim
 Testes: admin local em desktop/mobile; tela de login e navegacao renderizam sem overflow
 Pendencias: depende do deploy do Apps Script e da configuracao ADMIN_PASSWORD para testar login, token e exclusao real
 ```
 
 ### Fase 4 - Tema e QA Pages
 
-Status: Implementada localmente
+Status: Enviada para QA
 
 Branch usada:
 
@@ -218,7 +218,7 @@ Inicio: 2026-06-09
 Fim: 2026-06-09 (local)
 Branch: codex/melhorias-palpites
 Commit: feat(melhorias): implementa fluxo de palpites e admin
-Merge em qa: pendente
+Merge em qa: sim
 URL de QA: pendente
 Testes: formulario, dashboard e admin abertos localmente; mobile 390px sem overflow; alternancia de tema altera data-theme
 Pendencias: enviar branch para qa e aguardar publicacao do workflow de Pages

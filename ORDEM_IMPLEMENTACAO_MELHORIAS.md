@@ -33,7 +33,7 @@ Se houver conflito entre arquivos, a ordem de prioridade e:
 ## Status Geral
 
 ```text
-Status atual: implementacao enviada para qa; aguardando deploy do Apps Script e ajuste do GitHub Pages para QA
+Status atual: implementacao enviada para qa; QA Pages externo publicado; aguardando validacao final antes da PR para main
 Branch unica de implementacao: codex/melhorias-palpites
 Branch permanente de QA: qa
 Branch de producao: main
@@ -207,8 +207,8 @@ Checklist:
 - [x] Validar contraste em claro e escuro.
 - [x] Validar responsividade.
 - [x] Criar workflow de GitHub Pages para `qa`.
-- [ ] Publicar QA.
-- [ ] Registrar URL de QA.
+- [x] Publicar QA.
+- [x] Registrar URL de QA.
 - [ ] Validar QA antes da PR para `main`.
 
 Atualizacao da fase:
@@ -219,9 +219,9 @@ Fim: 2026-06-09 (local)
 Branch: codex/melhorias-palpites
 Commit: feat(melhorias): implementa fluxo de palpites e admin
 Merge em qa: sim
-URL de QA: pendente; workflow falhou porque o ambiente github-pages bloqueia deploy da branch qa e o Pages do repositorio ainda usa main em modo legacy
+URL de QA: https://iguinhowill.github.io/OS-PALPI-TI-QA/
 Testes: formulario, dashboard e admin abertos localmente; mobile 390px sem overflow; alternancia de tema altera data-theme
-Pendencias: ajustar configuracao do GitHub Pages/ambiente para permitir QA separado; deploy do run 27233259195 falhou por regra de ambiente
+Pendencias: validar QA com Apps Script publicado na copia da planilha; configurar `QA_PAGES_TOKEN` no repositorio principal para automatizar novos deploys externos
 ```
 
 ## Fluxo Git Obrigatorio
@@ -246,3 +246,4 @@ Fluxo aplicado:
 | --- | --- | --- |
 | 2026-06-09 | Criacao do arquivo de ordem com todas as fases pendentes | Codex |
 | 2026-06-09 | Implementacao local das quatro fases em branch unica | Codex |
+| 2026-06-09 | Publicacao inicial do QA Pages externo em `Iguinhowill/OS-PALPI-TI-QA` | Codex |

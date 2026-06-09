@@ -7,8 +7,6 @@ on:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
   group: qa-pages
@@ -17,9 +15,9 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+    env:
+      QA_PAGES_TOKEN: ${{ secrets.QA_PAGES_TOKEN }}
+      QA_REPOSITORY: Iguinhowill/OS-PALPI-TI-QA
 
     steps:
       - name: Checkout
@@ -29,15 +27,23 @@ jobs:
         run: |
           mkdir -p _site
           cp index.html dashboard.html admin.html palpiti.css palpiti.js formulario.js admin.js theme.js _site/
+          touch _site/.nojekyll
 
-      - name: Configure Pages
-        uses: actions/configure-pages@v5
+      - name: Skip deploy without token
+        if: env.QA_PAGES_TOKEN == ''
+        run: |
+          echo "QA_PAGES_TOKEN is not configured. Static artifact was prepared, but deploy was skipped."
 
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: _site
-
-      - name: Deploy
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Deploy to QA repository
+        if: env.QA_PAGES_TOKEN != ''
+        run: |
+          git clone "https://x-access-token:${QA_PAGES_TOKEN}@github.com/${QA_REPOSITORY}.git" qa-pages
+          find qa-pages -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
+          cp -R _site/. qa-pages/
+          cd qa-pages
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --quiet && exit 0
+          git commit -m "deploy: publica qa estatico"
+          git push origin main

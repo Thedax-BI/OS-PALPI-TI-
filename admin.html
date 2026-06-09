@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="dark light" />
+  <title>OS PALPI-TI - Admin</title>
+  <link rel="stylesheet" href="palpiti.css" />
+  <script src="theme.js" defer></script>
+  <script src="admin.js" defer></script>
+</head>
+<body class="admin-page">
+  <div class="wrap admin-shell">
+    <header class="app-header">
+      <div>
+        <p class="eyebrow">Área administrativa</p>
+        <h1>Admin OS PALPI-TI</h1>
+        <p class="subtitle">Correções e cadastros conectados à planilha.</p>
+      </div>
+
+      <nav class="top-actions" aria-label="Navegação">
+        <a class="btn ghost nav-btn" href="index.html">Formulário</a>
+        <a class="btn ghost nav-btn" href="dashboard.html">Dashboard</a>
+        <button class="btn ghost icon-btn theme-toggle" id="themeToggle" type="button">Tema</button>
+      </nav>
+    </header>
+
+    <section class="card login-card" id="loginPanel" aria-labelledby="loginTitle">
+      <div class="sectionHeader">
+        <div>
+          <p class="eyebrow">Acesso</p>
+          <h2 id="loginTitle">Entrar</h2>
+        </div>
+      </div>
+
+      <form id="loginForm" class="compact-form">
+        <div class="field">
+          <label for="adminPassword">Senha administrativa</label>
+          <input id="adminPassword" name="password" type="password" autocomplete="current-password" required />
+        </div>
+        <button class="btn" id="btnLogin" type="submit" disabled>Entrar</button>
+      </form>
+      <div class="msg" id="loginMessage" aria-live="polite"></div>
+    </section>
+
+    <main class="admin-grid is-hidden" id="adminPanel">
+      <div class="status-bar">
+        <span id="adminStatus">Sessão ativa</span>
+        <button class="btn ghost compact" id="btnLogout" type="button">Sair</button>
+      </div>
+
+      <section class="card admin-section" aria-labelledby="entriesTitle">
+        <div class="sectionHeader">
+          <div>
+            <p class="eyebrow">Correção</p>
+            <h2 id="entriesTitle">Lançamentos</h2>
+          </div>
+          <button class="btn ghost compact" id="btnReloadEntries" type="button">Atualizar</button>
+        </div>
+
+        <form id="entryFilters" class="admin-filters">
+          <select id="entryStatus" name="status">
+            <option value="ativo">Ativos</option>
+            <option value="excluido">Excluídos</option>
+            <option value="todos">Todos</option>
+          </select>
+          <select id="entryType" name="tipoLancamento">
+            <option value="">Tipos</option>
+            <option value="palpite">Palpite</option>
+            <option value="resultado">Resultado</option>
+          </select>
+          <select id="entryCompetition" name="competicao">
+            <option value="">Competições</option>
+          </select>
+          <input id="entryName" name="nome" placeholder="Palpiteiro" />
+          <input id="entryStart" name="dataInicio" type="date" />
+          <input id="entryEnd" name="dataFim" type="date" />
+          <input id="entrySearch" name="q" placeholder="Buscar jogo" />
+          <button class="btn ghost" id="btnClearEntryFilters" type="button">Limpar</button>
+        </form>
+
+        <div class="tblWrap admin-table-wrap">
+          <table class="tbl admin-table">
+            <thead>
+              <tr>
+                <th>Data</th>
+                <th>Competição</th>
+                <th>Jogo</th>
+                <th>Tipo</th>
+                <th>Nome</th>
+                <th>Placar</th>
+                <th>Status</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="entriesBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="card admin-section" aria-labelledby="teamsTitle">
+        <div class="sectionHeader">
+          <div>
+            <p class="eyebrow">Cadastro</p>
+            <h2 id="teamsTitle">Times</h2>
+          </div>
+        </div>
+
+        <form id="teamForm" class="admin-form">
+          <div class="field">
+            <label for="teamName">Nome do time</label>
+            <input id="teamName" name="time" required />
+          </div>
+          <div class="field">
+            <label for="teamCompetition">Competição</label>
+            <select id="teamCompetition" name="campeonato" required></select>
+          </div>
+          <div class="field span2">
+            <label for="teamLogo">URL do logo</label>
+            <input id="teamLogo" name="logo" type="url" placeholder="https://..." />
+          </div>
+          <label class="checkline">
+            <input id="teamActive" name="ativo" type="checkbox" checked />
+            Ativo
+          </label>
+          <div class="form-actions">
+            <button class="btn ghost" id="btnClearTeam" type="button">Limpar</button>
+            <button class="btn" type="submit">Salvar time</button>
+          </div>
+        </form>
+
+        <div class="tblWrap admin-table-wrap">
+          <table class="tbl admin-table">
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>Competição</th>
+                <th>Logo</th>
+                <th>Ativo</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="teamsBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="card admin-section" aria-labelledby="competitionsTitle">
+        <div class="sectionHeader">
+          <div>
+            <p class="eyebrow">Cadastro</p>
+            <h2 id="competitionsTitle">Competições</h2>
+          </div>
+        </div>
+
+        <form id="competitionForm" class="admin-form">
+          <input id="competitionCode" name="competicao" type="hidden" />
+          <div class="field span2">
+            <label for="competitionName">Nome exibido</label>
+            <input id="competitionName" name="nome" required />
+          </div>
+          <div class="field">
+            <label for="competitionOrder">Ordem</label>
+            <input id="competitionOrder" name="ordem" type="number" min="0" step="1" value="999" />
+          </div>
+          <label class="checkline">
+            <input id="competitionActive" name="ativa" type="checkbox" checked />
+            Ativa
+          </label>
+          <div class="form-actions">
+            <button class="btn ghost" id="btnClearCompetition" type="button">Limpar</button>
+            <button class="btn" type="submit">Salvar competição</button>
+          </div>
+        </form>
+
+        <div class="tblWrap admin-table-wrap">
+          <table class="tbl admin-table">
+            <thead>
+              <tr>
+                <th>Código</th>
+                <th>Nome</th>
+                <th>Ordem</th>
+                <th>Ativa</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="competitionsBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <div class="msg" id="adminMessage" aria-live="polite"></div>
+    </main>
+  </div>
+</body>
+</html>

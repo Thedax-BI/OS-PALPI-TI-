@@ -131,20 +131,30 @@ async function fetchTeams() {
   return Array.isArray(data.teams) ? data.teams : [];
 }
 
+async function fetchCompetitions() {
+  const url = `${CONFIG.SCRIPT_URL}?action=competitions&secret=${encodeURIComponent(CONFIG.SECRET)}`;
+  const data = await jsonp(url);
+  if (!data?.ok) return [];
+  return Array.isArray(data.competitions) ? data.competitions : [];
+}
+
 // ---------- Normalization ----------
 function normalizeRows(rows) {
   return (rows || [])
     .map(r => ({
       createdAt: String(r.createdAt || ""),
       nome: String(r.nome || "").trim(),
-      dataJogo: String(r.dataJogo || "").trim(),        // YYYY-MM-DD
+      dataJogo: String(r.dataJogo || "").trim().slice(0, 10),        // YYYY-MM-DD
       competicao: String(r.competicao || "").trim(),
       mandante: String(r.mandante || "").trim(),
       visitante: String(r.visitante || "").trim(),
       golsMandante: Number(r.golsMandante),
       golsVisitante: Number(r.golsVisitante),
       tipoLancamento: String(r.tipoLancamento || "").trim(), // palpite|resultado
+      id: String(r.id || "").trim(),
+      status: String(r.status || "ativo").trim().toLowerCase(),
     }))
+    .filter(r => r.status !== "excluido")
     .filter(r => r.dataJogo && r.competicao && r.mandante && r.visitante)
     .filter(r => r.tipoLancamento === "palpite" || r.tipoLancamento === "resultado");
 }
@@ -522,22 +532,31 @@ async function init(forceReload = false) {
     errEl.style.display = "none";
     errEl.innerHTML = "";
 
-    // 1) carrega times (logos)
+    // 1) carrega competições para labels dinâmicos
+    const competitions = await fetchCompetitions().catch(() => []);
+    for (const competition of competitions) {
+      const code = String(competition.competicao || "").trim();
+      const name = String(competition.nome || "").trim();
+      if (code && name) CONFIG.COMP_LABEL[code] = name;
+    }
+
+    // 2) carrega times (logos)
     const teams = await fetchTeams().catch(() => []);
     CRESTS = new Map();
     for (const t of teams) {
       const time = String(t.time || "").trim();
       const camp = String(t.campeonato || "").trim();
       const logo = String(t.logo || "").trim();
-      if (time && camp && logo) CRESTS.set(`${camp}|${time}`, logo);
+      const active = String(t.ativo ?? "true").trim().toLowerCase();
+      if (time && camp && logo && active !== "false" && active !== "excluido") CRESTS.set(`${camp}|${time}`, logo);
     }
 
-    // 2) carrega lançamentos
+    // 3) carrega lançamentos
     const raw = await fetchRows();
     ALL_ROWS = normalizeRows(raw);
     ALL_GAMES = buildGames(ALL_ROWS);
 
-    // 3) popula filtros
+    // 4) popula filtros
     const prevU = fPalpiteiro.value;
     const prevC = fLiga.value;
     const prevD = fData.value;

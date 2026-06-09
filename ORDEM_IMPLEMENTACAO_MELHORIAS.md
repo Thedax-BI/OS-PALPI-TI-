@@ -33,7 +33,7 @@ Se houver conflito entre arquivos, a ordem de prioridade e:
 ## Status Geral
 
 ```text
-Status atual: implementacao enviada para qa; aguardando deploy do Apps Script e validacao em qa
+Status atual: implementacao enviada para qa; aguardando deploy do Apps Script e ajuste do GitHub Pages para QA
 Branch unica de implementacao: codex/melhorias-palpites
 Branch permanente de QA: qa
 Branch de producao: main
@@ -219,9 +219,9 @@ Fim: 2026-06-09 (local)
 Branch: codex/melhorias-palpites
 Commit: feat(melhorias): implementa fluxo de palpites e admin
 Merge em qa: sim
-URL de QA: pendente
+URL de QA: pendente; workflow falhou porque o ambiente github-pages bloqueia deploy da branch qa e o Pages do repositorio ainda usa main em modo legacy
 Testes: formulario, dashboard e admin abertos localmente; mobile 390px sem overflow; alternancia de tema altera data-theme
-Pendencias: enviar branch para qa e aguardar publicacao do workflow de Pages
+Pendencias: ajustar configuracao do GitHub Pages/ambiente para permitir QA separado; deploy do run 27233259195 falhou por regra de ambiente
 ```
 
 ## Fluxo Git Obrigatorio

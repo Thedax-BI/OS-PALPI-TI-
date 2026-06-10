@@ -39,6 +39,8 @@ const adminEls = {
   teamLogo: $("teamLogo"),
   teamActive: $("teamActive"),
   btnClearTeam: $("btnClearTeam"),
+  btnSaveTeam: $("btnSaveTeam"),
+  teamEditState: $("teamEditState"),
   teamsBody: $("teamsBody"),
   competitionForm: $("competitionForm"),
   competitionCode: $("competitionCode"),
@@ -46,6 +48,8 @@ const adminEls = {
   competitionOrder: $("competitionOrder"),
   competitionActive: $("competitionActive"),
   btnClearCompetition: $("btnClearCompetition"),
+  btnSaveCompetition: $("btnSaveCompetition"),
+  competitionEditState: $("competitionEditState"),
   competitionsBody: $("competitionsBody"),
 };
 
@@ -102,6 +106,24 @@ function setAdminMessage(text, type = "") {
   adminEls.adminMessage.textContent = text;
   adminEls.adminMessage.className = `msg ${type}`.trim();
   adminEls.adminMessage.style.display = text ? "block" : "none";
+}
+
+function setTeamEditState(team = null) {
+  const isEditing = Boolean(team);
+  adminEls.teamForm.classList.toggle("is-editing", isEditing);
+  adminEls.teamEditState.classList.toggle("is-hidden", !isEditing);
+  adminEls.teamEditState.textContent = isEditing ? `Editando time: ${team.time || ""}` : "";
+  adminEls.btnSaveTeam.textContent = isEditing ? "Atualizar time" : "Salvar time";
+  adminEls.btnClearTeam.textContent = isEditing ? "Cancelar edição" : "Limpar";
+}
+
+function setCompetitionEditState(competition = null) {
+  const isEditing = Boolean(competition);
+  adminEls.competitionForm.classList.toggle("is-editing", isEditing);
+  adminEls.competitionEditState.classList.toggle("is-hidden", !isEditing);
+  adminEls.competitionEditState.textContent = isEditing ? `Editando competição: ${competition.nome || ""}` : "";
+  adminEls.btnSaveCompetition.textContent = isEditing ? "Atualizar competição" : "Salvar competição";
+  adminEls.btnClearCompetition.textContent = isEditing ? "Cancelar edição" : "Limpar";
 }
 
 function setAuthenticated(isAuthenticated) {
@@ -318,6 +340,7 @@ async function deleteEntry(id) {
 
 async function saveTeam(event) {
   event.preventDefault();
+  const isEditing = adminEls.teamForm.classList.contains("is-editing");
   const data = await adminJsonp("adminUpsertTeam", {
     token: adminState.token,
     time: adminEls.teamName.value,
@@ -332,12 +355,13 @@ async function saveTeam(event) {
   }
 
   clearTeamForm();
-  setAdminMessage("Time salvo.", "ok");
+  setAdminMessage(isEditing ? "Time atualizado." : "Time salvo.", "ok");
   await loadTeams();
 }
 
 async function saveCompetition(event) {
   event.preventDefault();
+  const isEditing = adminEls.competitionForm.classList.contains("is-editing");
   const params = {
     token: adminState.token,
     nome: adminEls.competitionName.value,
@@ -353,7 +377,7 @@ async function saveCompetition(event) {
   }
 
   clearCompetitionForm();
-  setAdminMessage("Competição salva.", "ok");
+  setAdminMessage(isEditing ? "Competição atualizada." : "Competição salva.", "ok");
   await loadCompetitions();
   await loadEntries();
 }
@@ -361,6 +385,7 @@ async function saveCompetition(event) {
 function clearTeamForm() {
   adminEls.teamForm.reset();
   adminEls.teamActive.checked = true;
+  setTeamEditState();
 }
 
 function clearCompetitionForm() {
@@ -368,6 +393,7 @@ function clearCompetitionForm() {
   adminEls.competitionCode.value = "";
   adminEls.competitionOrder.value = "999";
   adminEls.competitionActive.checked = true;
+  setCompetitionEditState();
 }
 
 function editTeam(index) {
@@ -377,6 +403,7 @@ function editTeam(index) {
   adminEls.teamCompetition.value = team.campeonato || "";
   adminEls.teamLogo.value = team.logo || "";
   adminEls.teamActive.checked = Boolean(team.ativo);
+  setTeamEditState(team);
   adminEls.teamName.focus();
 }
 
@@ -387,6 +414,7 @@ function editCompetition(index) {
   adminEls.competitionName.value = competition.nome || "";
   adminEls.competitionOrder.value = competition.ordem || "999";
   adminEls.competitionActive.checked = Boolean(competition.ativa);
+  setCompetitionEditState(competition);
   adminEls.competitionName.focus();
 }
 

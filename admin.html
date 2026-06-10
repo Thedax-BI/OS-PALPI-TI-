@@ -80,7 +80,7 @@
         </form>
 
         <div class="tblWrap admin-table-wrap">
-          <table class="tbl admin-table">
+          <table class="tbl admin-table entries-table">
             <thead>
               <tr>
                 <th>Data</th>
@@ -107,6 +107,8 @@
           </div>
         </div>
 
+        <div class="edit-state is-hidden" id="teamEditState" aria-live="polite"></div>
+
         <form id="teamForm" class="admin-form">
           <div class="field">
             <label for="teamName">Nome do time</label>
@@ -126,12 +128,12 @@
           </label>
           <div class="form-actions">
             <button class="btn ghost" id="btnClearTeam" type="button">Limpar</button>
-            <button class="btn" type="submit">Salvar time</button>
+            <button class="btn" id="btnSaveTeam" type="submit">Salvar time</button>
           </div>
         </form>
 
         <div class="tblWrap admin-table-wrap">
-          <table class="tbl admin-table">
+          <table class="tbl admin-table teams-table">
             <thead>
               <tr>
                 <th>Time</th>
@@ -154,6 +156,8 @@
           </div>
         </div>
 
+        <div class="edit-state is-hidden" id="competitionEditState" aria-live="polite"></div>
+
         <form id="competitionForm" class="admin-form">
           <input id="competitionCode" name="competicao" type="hidden" />
           <div class="field span2">
@@ -170,12 +174,12 @@
           </label>
           <div class="form-actions">
             <button class="btn ghost" id="btnClearCompetition" type="button">Limpar</button>
-            <button class="btn" type="submit">Salvar competição</button>
+            <button class="btn" id="btnSaveCompetition" type="submit">Salvar competição</button>
           </div>
         </form>
 
         <div class="tblWrap admin-table-wrap">
-          <table class="tbl admin-table">
+          <table class="tbl admin-table competitions-table">
             <thead>
               <tr>
                 <th>Código</th>

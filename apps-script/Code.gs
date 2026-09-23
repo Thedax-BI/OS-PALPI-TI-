@@ -45,7 +45,7 @@ const ALLOWED_NAMES = [
   "Diego Gavioli",
   "Matheus Luz",
   "Resultado",
-  "Lucas Silva",
+  "Vinicius Fernandes",
   "Enzo Rodrigues",
 ];
 

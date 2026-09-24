@@ -46,6 +46,11 @@ function escapeHtml(s) {
   }[m]));
 }
 
+function participantName(name) {
+  const trimmed = String(name || "").trim();
+  return trimmed === "Lucas Silva" ? "Vinicius Fernandes" : trimmed;
+}
+
 function pad2(n) { return (n < 10 ? "0" : "") + n; }
 function formatDateBR(yyyyMMdd) {
   // input esperado: YYYY-MM-DD
@@ -143,7 +148,7 @@ function normalizeRows(rows) {
   return (rows || [])
     .map(r => ({
       createdAt: String(r.createdAt || ""),
-      nome: String(r.nome || "").trim(),
+      nome: participantName(r.nome),
       dataJogo: String(r.dataJogo || "").trim().slice(0, 10),        // YYYY-MM-DD
       competicao: String(r.competicao || "").trim(),
       mandante: String(r.mandante || "").trim(),
